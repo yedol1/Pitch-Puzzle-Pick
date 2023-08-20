@@ -14,48 +14,12 @@ const AlignBtn = () => {
   );
 };
 
-const Table = () => {
-  const data = [
-    {
-      UID: '745850',
-      CA: 185,
-      PA: 200,
-      Name: 'Lionel Messi	',
-      AP: '€78M',
-      Salary: '€775,000 p/w',
-      DOB: '1987/6/24 (35 years old)',
-    },
-    {
-      UID: '745800',
-      CA: 140,
-      PA: 150,
-      Name: 'Lionel Messi	',
-      AP: '€78M',
-      Salary: '€775,000 p/w',
-      DOB: '1987/6/24 (35 years old)',
-    },
-    {
-      UID: '748500',
-      CA: 111,
-      PA: 120,
-      Name: 'Lionel Messi	',
-      AP: '€78M',
-      Salary: '€775,000 p/w',
-      DOB: '1987/6/24 (35 years old)',
-    },
-    {
-      UID: '458500',
-      CA: 88,
-      PA: 90,
-      Name: 'Lionel Messi	',
-      AP: '€78M',
-      Salary: '€775,000 p/w',
-      DOB: '1987/6/24 (35 years old)',
-    },
-  ];
-
+const Table = (data: any) => {
+  console.log(data);
   return (
-    <table className={`${notoSansKr.className} flex flex-col items-center rounded-lg mt-8 shadow-custom`}>
+    <table
+      className={`${notoSansKr.className} flex flex-col items-center rounded-lg mt-8 shadow-custom rounded-bl-lg rounded-br-lg`}
+    >
       <thead className='text-sm text-white font-normal font-medium leading-none tracking-tighter'>
         <tr className='flex h-42 bg-pri-color rounded-tl-lg rounded-tr-lg '>
           <th className='flex flex-row w-table py-0 pl-6 items-center space-x-1.5'>
@@ -97,7 +61,7 @@ const Table = () => {
         </tr>
       </thead>
       <tbody className={`${montserrat.className} text-sm font-normal font-medium leading-none tracking-tighter`}>
-        {data.map((user: any) => (
+        {data.data.map((user: any) => (
           <TableRow
             user={user}
             // isDisabled={true}

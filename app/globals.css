@@ -15,4 +15,5 @@
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(180deg, #80b2df 0%, rgba(128, 178, 223, 0) 50%);
+  background-attachment: fixed;
 }

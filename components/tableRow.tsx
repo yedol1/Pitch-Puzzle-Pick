@@ -7,7 +7,7 @@ const TableRow = ({ user, isDisabled = false }: any) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
 
   return (
-    <tr key={user.UID} className='flex h-16 rounded-bl-lg rounded-br-lg border-t border-solid border-gray-300'>
+    <tr key={user.UID} className='flex h-16 border-t border-solid border-gray-300 bg-white'>
       <td className='flex flex-row w-table py-0 pl-6 items-center space-x-1.5 pr-2 '>
         <div
           className={`w-9 h-9 flex-shrink-0 flex items-center text-center rounded-lg 
@@ -30,11 +30,11 @@ const TableRow = ({ user, isDisabled = false }: any) => {
         <div
           className={`w-9 h-9 flex-shrink-0 flex items-center text-center rounded-lg 
                 ${
-                  user.CA < 100
+                  user.PA < 100
                     ? 'bg-bad'
-                    : user.CA < 130
+                    : user.PA < 130
                     ? 'bg-gradient-to-r from-normalA to-normalB'
-                    : user.CA < 160
+                    : user.PA < 160
                     ? 'bg-gradient-to-r from-goodA to-goodB'
                     : 'bg-gradient-to-r from-excellentA to-excellentB'
                 }`}

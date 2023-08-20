@@ -1,20 +1,86 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL") // uses connection pooling
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  provider = "mysql"
+  url      = env("DATABASE_URL")
 }
 
-model users {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  image     String
-  createdAt DateTime @default(now())
+model PlayerInfo {
+  UID        Int           @id @unique
+  Based      String?       @db.VarChar(512)
+  Division   String?       @db.VarChar(512)
+  Club       String?       @db.VarChar(512)
+  Name       String?       @db.VarChar(512)
+  CA         Int?
+  PA         Int?
+  Position   String?       @db.VarChar(512)
+  Age        Int?
+  Nat        String?       @db.VarChar(512)
+  DOB        String?       @db.VarChar(512)
+  Weight     String?       @db.VarChar(512)
+  Height     String?       @db.VarChar(512)
+  RightFoot  String?       @db.VarChar(512)
+  LeftFoot   String?       @db.VarChar(512)
+  AP         String?       @db.VarChar(512)
+  Salary     String?       @db.VarChar(512)
+  Personality String?      @db.VarChar(512)
+  ImpM       Int?
+  InjPr      Int?
+  Cons       Int?
+  Dirt       Int?
+  status     PlayerStatus  @relation(fields: [UID], references: [UID])
+}
+
+model PlayerStatus {
+  UID   Int          @id @unique
+  Wor   Int?
+  One  Int?
+  Tec   Int?
+  Fin   Int?
+  Kic   Int?
+  Thr   Int?
+  OtB   Int?
+  Aer   Int?
+  Bal   Int?
+  Ecc   String?      @db.VarChar(512)
+  Bra   Int?
+  TRO   String?      @db.VarChar(512)
+  Dri   Int?
+  Ldr   Int?
+  Str   Int?
+  Agi   Int?
+  Ref   Int?
+  Fir   Int?
+  Han   Int?
+  Pos   Int?
+  Com   Int?
+  Acc   Int?
+  Det   Int?
+  Vis   Int?
+  Ant   Int?
+  Mar   Int?
+  LTh   Int?
+  Agg   Int?
+  Jum   Int?
+  Pac   Int?
+  Lon   Int?
+  Sta   Int?
+  Cnt   Int?
+  Fla   Int?
+  Cmp   Int?
+  Cor   Int?
+  Cro   Int?
+  Nat   Int?
+  Tck   Int?
+  Tea   Int?
+  Dec   Int?
+  Pas   Int?
+  Pun   Int?
+  Cmd   Int?
+  Pen   Int?
+  Fre   Int?
+  Hea   Int?
+  playerInfo PlayerInfo?
 }
