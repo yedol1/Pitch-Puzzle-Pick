@@ -12,7 +12,8 @@ const Home = () => {
   const [data, setData] = useState([]);
   useEffect(() => {
     (async () => {
-      const fetchData = await fetch('/api/player');
+      const fetchData = await fetch('/api/player?column=CA&order=desc');
+      // const fetchData = await fetch('/api/player?column=CA&order=asc');
       const data = await fetchData.json();
       setData(data);
     })();

@@ -9,7 +9,7 @@ const NavigationBar = () => {
   const pathname = usePathname();
   return (
     <nav
-      className={`${poppins.className} fixed top-0 flex w-screen py-2 px-20 justify-center items-center bg-transparent text-white`}
+      className={`${poppins.className} fixed top-0 flex w-screen py-2 px-20 justify-center items-center bg-transparent text-white backdrop-blur-sm`}
     >
       <div className='flex flex-row w-full justify-between items-center '>
         {/* 로고 */}
