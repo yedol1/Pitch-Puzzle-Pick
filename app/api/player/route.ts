@@ -14,6 +14,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
   const url = new URL(req.url, baseUrl);
   const column = url.searchParams.get('column') || 'CA';
   const order = url.searchParams.get('order') || 'desc';
+  const uid = url.searchParams.get('UID') || '';
   const validColumns = ['CA', 'PA', 'Name', 'Salary', 'AP'];
   const validOrders = ['asc', 'desc'];
   if (!validColumns.includes(column) || !validOrders.includes(order)) {
@@ -21,7 +22,8 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const users = await client.playerInfo.findMany({
-    take: 20,
+    take: 11,
+    ...(uid && uid !== '' && uid !== 'undefined' && { cursor: { UID: Number(uid) } }),
     orderBy: {
       [column]: order,
     },

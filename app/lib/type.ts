@@ -79,3 +79,21 @@ export interface PlayerInfoType {
 export type TableProps = {
   isDisabled?: boolean;
 };
+
+export type HeaderType = 'CA' | 'PA' | 'Name' | 'Salary' | 'AP';
+export type OrderType = 'asc' | 'desc';
+export interface FetchPlayersArgs {
+  pageParam?: number;
+  selectedHeader: HeaderType;
+  order: OrderType;
+}
+
+export type AlignBtnProps = {
+  header: HeaderType;
+  order: OrderType;
+  currentHeader: HeaderType;
+};
+
+export interface IProps {
+  handleIntersection: () => void;
+}
