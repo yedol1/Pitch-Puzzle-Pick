@@ -5,9 +5,17 @@ import { use, useState } from 'react';
 
 const TableRow = ({ user, isDisabled = false }: any) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
-
+  const formatValue = (value: number): string => {
+    if (value >= 100000000) {
+      return `${Math.round(value / 100000000)}억`;
+    } else if (value >= 10000) {
+      return `${Math.round(value / 10000)}만`;
+    } else {
+      return value.toString();
+    }
+  };
   return (
-    <tr key={user.UID} className='flex h-16 border-t border-solid border-gray-300 bg-white'>
+    <tr className='flex h-16 border-t border-solid border-gray-300 bg-white'>
       <td className='flex flex-row w-table py-0 pl-6 items-center space-x-1.5 pr-2 '>
         <div
           className={`w-9 h-9 flex-shrink-0 flex items-center text-center rounded-lg 
@@ -66,10 +74,10 @@ const TableRow = ({ user, isDisabled = false }: any) => {
         </Link>
       </td>
       <td className='hidden tableSalary:flex w-170 py-0 pl-6 items-center space-x-1.5 pr-2'>
-        <p className='w-full truncate'>{user.Salary}</p>
+        <p className='w-full truncate'>{'주급 ' + formatValue(user.Salary) + ' 유로'}</p>
       </td>
       <td className='hidden tableAP:flex w-table py-0 pl-6 items-center space-x-1.5 pr-2'>
-        <p className='w-full truncate'>{user.AP}</p>
+        <p className='w-full truncate'>{formatValue(user.AP) + ' 유로'}</p>
       </td>
       <td className='hidden tableDOB:flex w-170 py-0 pl-6 items-center space-x-1.5 pr-2'>
         <p className='w-full truncate'>{user.DOB}</p>

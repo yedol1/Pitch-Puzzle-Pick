@@ -12,26 +12,20 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
   const baseUrl = `http://${req.headers.host}`;
 
   const url = new URL(req.url, baseUrl);
-  const column = url.searchParams.get('column');
-  const order = url.searchParams.get('order');
-  if (column === 'CA' && order === 'desc') {
-    const users = await client.playerInfo.findMany({
-      take: 20,
-      orderBy: {
-        CA: 'desc',
-      },
-    });
-
-    return NextResponse.json(users);
+  const column = url.searchParams.get('column') || 'CA';
+  const order = url.searchParams.get('order') || 'desc';
+  const validColumns = ['CA', 'PA', 'Name', 'Salary', 'AP'];
+  const validOrders = ['asc', 'desc'];
+  if (!validColumns.includes(column) || !validOrders.includes(order)) {
+    return res.status(400).send('Invalid column or order value');
   }
-  if (column === 'CA' && order === 'asc') {
-    const users = await client.playerInfo.findMany({
-      take: 20,
-      orderBy: {
-        CA: 'asc',
-      },
-    });
 
-    return NextResponse.json(users);
-  }
+  const users = await client.playerInfo.findMany({
+    take: 20,
+    orderBy: {
+      [column]: order,
+    },
+  });
+
+  return NextResponse.json(users);
 }
