@@ -17,3 +17,21 @@ body {
   background: linear-gradient(180deg, #80b2df 0%, rgba(128, 178, 223, 0) 50%);
   background-attachment: fixed;
 }
+
+/* 웹 키트 기반 브라우저의 경우 */
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox의 경우 */
+input[type='number']::-moz-outer-spin-button,
+input[type='number']::-moz-inner-spin-button {
+  display: none;
+}
+
+/* 모든 브라우저에서 입력 필드에 대한 위, 아래 화살표 제거 */
+input[type='number'] {
+  -moz-appearance: textfield;
+}

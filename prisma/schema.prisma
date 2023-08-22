@@ -44,9 +44,9 @@ model PlayerStatus {
   OtB        Int?
   Aer        Int?
   Bal        Int?
-  Ecc        String?     @db.VarChar(512)
+  Ecc        Int?
   Bra        Int?
-  TRO        String?     @db.VarChar(512)
+  TRO        Int?
   Dri        Int?
   Ldr        Int?
   Str        Int?

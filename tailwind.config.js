@@ -34,6 +34,7 @@ module.exports = {
       },
       letterSpacing: {
         tighter: '-0.09px',
+        option: '0.15px',
       },
       spacing: {
         6.5: '26px',
@@ -50,8 +51,12 @@ module.exports = {
       },
       width: {
         93: '372px',
+        'selet-option': '96px',
         table: '100px',
         name: '240px',
+        'text-area': '174px',
+        9.5: '38px',
+        'option-container': '360px',
         127.5: '510px',
         170: '170px',
       },

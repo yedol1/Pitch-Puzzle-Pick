@@ -78,6 +78,7 @@ export interface PlayerInfoType {
 
 export type TableProps = {
   isDisabled?: boolean;
+  filters?: any;
 };
 
 export type HeaderType = 'CA' | 'PA' | 'Name' | 'Salary' | 'AP';
@@ -86,6 +87,7 @@ export interface FetchPlayersArgs {
   pageParam?: number;
   selectedHeader: HeaderType;
   order: OrderType;
+  filters?: any;
 }
 
 export type AlignBtnProps = {
@@ -96,4 +98,11 @@ export type AlignBtnProps = {
 
 export interface IProps {
   handleIntersection: () => void;
+}
+
+export interface FilterState {
+  [key: string]: {
+    min: number | null;
+    max: number | null;
+  };
 }

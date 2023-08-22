@@ -1,16 +1,17 @@
 'use client';
-import Table from '@/components/table';
+import { Provider } from 'react-redux';
+import store from './lib/store/store';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import SearchPage from '@/components/searchPage';
 
 const queryClient = new QueryClient();
 const Home = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <main>
-        <Table isDisabled={true} />
-      </main>
-    </QueryClientProvider>
+    <Provider store={store}>
+      <QueryClientProvider client={queryClient}>
+        <SearchPage />
+      </QueryClientProvider>
+    </Provider>
   );
 };
-
 export default Home;

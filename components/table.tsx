@@ -1,10 +1,10 @@
-'use client';
-import { useEffect, useState } from 'react';
 import { notoSansKr, montserrat } from '@/app/lib/font';
 import TableRow from './tableRow';
-import { TableProps, HeaderType, OrderType, AlignBtnProps, PlayerInfoType } from '@/app/lib/type';
-import { useFetchPlayers } from '@/app/lib/reactQuery/useFetchPlayer';
+import { HeaderType, AlignBtnProps, PlayerInfoType } from '@/app/lib/type';
 import Observer from './observer';
+import { useDispatch, useSelector } from 'react-redux';
+import { setHeader, toggleOrder } from '@/app/lib/store/sort';
+import { RootState } from '@/app/lib/store/filters';
 
 const AlignBtn = ({ header, order, currentHeader }: AlignBtnProps) => {
   const isSelected = header === currentHeader;
@@ -27,18 +27,18 @@ const AlignBtn = ({ header, order, currentHeader }: AlignBtnProps) => {
   );
 };
 
-const Table = ({ isDisabled }: TableProps) => {
-  const [selectedHeader, setSelectedHeader] = useState<HeaderType>('CA');
-  const [order, setOrder] = useState<OrderType>('desc');
+const Table = ({ isDisabled, data, hasNextPage, fetchNextPage }: any) => {
+  const dispatch = useDispatch();
 
-  const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useFetchPlayers(selectedHeader, order);
+  // Redux store에서 상태 가져오기
+  const selectedHeader = useSelector((state: RootState) => state.table.selectedHeader);
+  const order = useSelector((state: RootState) => state.table.order);
 
   const handleClick = (headerValue: HeaderType) => {
     if (selectedHeader === headerValue) {
-      setOrder((prevOrder) => (prevOrder === 'desc' ? 'asc' : 'desc'));
+      dispatch(toggleOrder()); // Redux action 사용
     } else {
-      setSelectedHeader(headerValue);
-      setOrder('desc');
+      dispatch(setHeader(headerValue)); // Redux action 사용
     }
   };
 
@@ -51,31 +51,46 @@ const Table = ({ isDisabled }: TableProps) => {
           <tr className='flex h-42 bg-pri-color rounded-tl-lg rounded-tr-lg '>
             <th className='flex flex-row w-table py-0 pl-6 items-center space-x-1.5'>
               <p className='text-sm font-normal font-medium leading-none tracking-tighter '>현재능력</p>
-              <button className='flex flex-col justify-center items-start' onClick={() => handleClick('CA')}>
+              <button
+                className='flex flex-col justify-center items-start'
+                onClick={() => handleClick('CA' as HeaderType)}
+              >
                 <AlignBtn header='CA' order={order} currentHeader={selectedHeader} />
               </button>
             </th>
             <th className='flex w-table py-0 pl-6 items-center space-x-1.5'>
               <p className='text-sm font-normal font-medium leading-none tracking-tighter'>잠재능력</p>
-              <button className='flex flex-col justify-center items-start' onClick={() => handleClick('PA')}>
+              <button
+                className='flex flex-col justify-center items-start'
+                onClick={() => handleClick('PA' as HeaderType)}
+              >
                 <AlignBtn header='PA' order={order} currentHeader={selectedHeader} />
               </button>
             </th>
             <th className='flex w-name py-0 pl-6 items-center space-x-1.5'>
               <p className='text-sm font-normal font-medium leading-none tracking-tighter'>이름</p>
-              <button className='flex flex-col justify-center items-start' onClick={() => handleClick('Name')}>
+              <button
+                className='flex flex-col justify-center items-start'
+                onClick={() => handleClick('Name' as HeaderType)}
+              >
                 <AlignBtn header='Name' order={order} currentHeader={selectedHeader} />
               </button>
             </th>
             <th className='hidden tableSalary:flex w-170 py-0 pl-6 items-center space-x-1.5'>
               <p className='text-sm font-normal font-medium leading-none tracking-tighter'>급여</p>
-              <button className='flex flex-col justify-center items-start' onClick={() => handleClick('Salary')}>
+              <button
+                className='flex flex-col justify-center items-start'
+                onClick={() => handleClick('Salary' as HeaderType)}
+              >
                 <AlignBtn header='Salary' order={order} currentHeader={selectedHeader} />
               </button>
             </th>
             <th className='hidden tableAP:flex w-table py-0 pl-6 items-center space-x-1.5'>
               <p className='text-sm font-normal font-medium leading-none tracking-tighter'>몸값</p>
-              <button className='flex flex-col justify-center items-start' onClick={() => handleClick('AP')}>
+              <button
+                className='flex flex-col justify-center items-start'
+                onClick={() => handleClick('AP' as HeaderType)}
+              >
                 <AlignBtn header='AP' order={order} currentHeader={selectedHeader} />
               </button>
             </th>
@@ -85,17 +100,12 @@ const Table = ({ isDisabled }: TableProps) => {
           </tr>
         </thead>
         <tbody className={`${montserrat.className} text-sm font-normal font-medium leading-none tracking-tighter`}>
-          {data?.pages.map((pageData) =>
+          {data?.pages.map((pageData: any) =>
             pageData.map((user: PlayerInfoType) => <TableRow user={user} key={user.UID} isDisabled={isDisabled} />),
           )}
         </tbody>
       </table>
-      {hasNextPage && (
-        <Observer handleIntersection={() => fetchNextPage()} />
-        // <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}>
-        //   {isFetchingNextPage ? '더 로딩중...' : '페이지네이션'}
-        // </button>
-      )}
+      {hasNextPage && <Observer handleIntersection={() => fetchNextPage()} />}
     </>
   );
 };
