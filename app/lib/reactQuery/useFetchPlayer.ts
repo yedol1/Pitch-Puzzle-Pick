@@ -29,9 +29,6 @@ const fetchPlayers = async ({ pageParam = undefined, selectedHeader, order, filt
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
-  if (response.ok) {
-    console.log(response);
-  }
   return response.json();
 };
 
@@ -40,7 +37,7 @@ export function useFetchPlayers(selectedHeader: HeaderType, order: OrderType, fi
     ['players', selectedHeader, order, JSON.stringify(filters)],
     ({ pageParam }) => fetchPlayers({ pageParam, selectedHeader, order, filters }),
     {
-      getNextPageParam: (lastPage, allPages) => lastPage[lastPage.length - 1]?.UID,
+      getNextPageParam: (lastPage) => lastPage[lastPage.length - 1]?.UID,
     },
   );
 
