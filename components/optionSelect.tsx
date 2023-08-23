@@ -2,8 +2,9 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Select from 'react-select';
 import Image from 'next/image';
-import { setFilters, addSelectedField, removeSelectedField, Filters, RootState } from '@/app/lib/store/filters';
+import { setFilters, addSelectedField, removeSelectedField } from '@/app/lib/store/filters';
 import { filterableFields } from '@/app/lib/constans';
+import { Filters, RootState } from '@/app/lib/store/reduxType';
 
 // 타입 지정
 type Option = {

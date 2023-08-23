@@ -1,83 +1,30 @@
-import { LastUIDState } from './findLastPlayer';
+import { Action, FiltersState, Filters } from './reduxType';
 
-// 1. Types
-type Filter = {
-  min?: number;
-  max?: number;
-};
+export const SET_FILTERS = 'filters/SET_FILTERS';
+export const ADD_SELECTED_FIELD = 'filters/ADD_SELECTED_FIELD';
+export const REMOVE_SELECTED_FIELD = 'filters/REMOVE_SELECTED_FIELD';
 
-export type Filters = {
-  [key: string]: Filter;
-};
-
-type FilterPayload = Filters;
-
-type FiltersState = {
-  filters: {
-    [key: string]: Filter;
-  };
-  selectedFields: string[];
-};
-
-type SetFiltersAction = {
-  type: typeof SET_FILTERS;
-  payload: {
-    [key: string]: Filter;
-  };
-};
-
-type TableState = {
-  selectedHeader: 'CA' | 'PA' | 'Name' | 'Salary' | 'AP';
-  order: 'asc' | 'desc';
-};
-
-export type RootState = {
-  filters: FiltersState;
-  table: TableState;
-  lastUID: LastUIDState;
-};
-
-type AddSelectedFieldAction = {
-  type: typeof ADD_SELECTED_FIELD;
-  payload: string;
-};
-
-type RemoveSelectedFieldAction = {
-  type: typeof REMOVE_SELECTED_FIELD;
-  payload: string;
-};
-
-type FiltersActionTypes = SetFiltersAction | AddSelectedFieldAction | RemoveSelectedFieldAction;
-
-// 2. Actions Types
-const SET_FILTERS = 'filters/SET_FILTERS';
-const ADD_SELECTED_FIELD = 'filters/ADD_SELECTED_FIELD';
-const REMOVE_SELECTED_FIELD = 'filters/REMOVE_SELECTED_FIELD';
-
-// 3. Action Creators
-export const setFilters = (filters: FilterPayload) => ({
+export const setFilters = (filters: Filters): Action<Filters> => ({
   type: SET_FILTERS,
   payload: filters,
 });
 
-export const addSelectedField = (field: string): AddSelectedFieldAction => ({
+export const addSelectedField = (field: string): Action<string> => ({
   type: ADD_SELECTED_FIELD,
   payload: field,
 });
 
-export const removeSelectedField = (field: string): RemoveSelectedFieldAction => ({
+export const removeSelectedField = (field: string): Action<string> => ({
   type: REMOVE_SELECTED_FIELD,
   payload: field,
 });
 
-// 4. Initial State
 const initialState: FiltersState = {
   filters: {},
   selectedFields: [],
 };
 
-// 5. Reducer
-const filtersReducer = (state = initialState, action: FiltersActionTypes): FiltersState => {
+const filtersReducer = (state = initialState, action: Action<any>): FiltersState => {
   switch (action.type) {
     case SET_FILTERS:
       return {
@@ -91,7 +38,7 @@ const filtersReducer = (state = initialState, action: FiltersActionTypes): Filte
       };
     case REMOVE_SELECTED_FIELD:
       const updatedFilters = { ...state.filters };
-      delete updatedFilters[action.payload]; // Removes the filter for the deleted field.
+      delete updatedFilters[action.payload];
       return {
         ...state,
         filters: updatedFilters,

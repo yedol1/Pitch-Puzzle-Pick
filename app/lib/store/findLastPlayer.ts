@@ -1,17 +1,8 @@
-export type LastUIDState = {
-  lastUID: string | null;
-};
+import { Action, LastUIDState } from './reduxType';
 
-type SetLastUIDAction = {
-  type: typeof SET_LAST_UID;
-  payload: string | null;
-};
+export const SET_LAST_UID = 'lastUID/SET_LAST_UID';
 
-type LastUIDActionTypes = SetLastUIDAction;
-
-const SET_LAST_UID = 'lastUID/SET_LAST_UID';
-
-export const setLastUID = (uid: string | null): SetLastUIDAction => ({
+export const setLastUID = (uid: string | null): Action<string | null> => ({
   type: SET_LAST_UID,
   payload: uid,
 });
@@ -20,7 +11,7 @@ const initialState: LastUIDState = {
   lastUID: null,
 };
 
-const lastUIDReducer = (state = initialState, action: LastUIDActionTypes): LastUIDState => {
+const lastUIDReducer = (state = initialState, action: Action<any>): LastUIDState => {
   switch (action.type) {
     case SET_LAST_UID:
       return {

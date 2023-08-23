@@ -4,7 +4,8 @@ import { HeaderType, AlignBtnProps, PlayerInfoType } from '@/app/lib/type';
 import Observer from './observer';
 import { useDispatch, useSelector } from 'react-redux';
 import { setHeader, toggleOrder } from '@/app/lib/store/sort';
-import { RootState } from '@/app/lib/store/filters';
+import { useFetchPlayers } from '@/app/lib/reactQuery/useFetchPlayer';
+import { RootState } from '@/app/lib/store/reduxType';
 
 const AlignBtn = ({ header, order, currentHeader }: AlignBtnProps) => {
   const isSelected = header === currentHeader;
@@ -27,12 +28,15 @@ const AlignBtn = ({ header, order, currentHeader }: AlignBtnProps) => {
   );
 };
 
-const Table = ({ isDisabled, data, hasNextPage, fetchNextPage }: any) => {
+const Table = ({ isDisabled }: any) => {
   const dispatch = useDispatch();
 
   // Redux store에서 상태 가져오기
   const selectedHeader = useSelector((state: RootState) => state.table.selectedHeader);
   const order = useSelector((state: RootState) => state.table.order);
+  const filters = useSelector((state: RootState) => state.filters.filters);
+  // 상태와 함께 데이터 가져오기
+  const { data, hasNextPage, fetchNextPage } = useFetchPlayers(selectedHeader, order, filters);
 
   const handleClick = (headerValue: HeaderType) => {
     if (selectedHeader === headerValue) {
