@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
-import { filterableFields, infoFields, statusFields } from '../../lib/constans';
+import { InfoFields, StatusFields } from '../../lib/constans';
 
 const client = new PrismaClient();
 
@@ -25,7 +25,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
 
   const whereConditions: any = {};
 
-  infoFields.forEach((field) => {
+  InfoFields.forEach((field) => {
     const min = url.searchParams.get(`${field}_min`);
     const max = url.searchParams.get(`${field}_max`);
 
@@ -37,7 +37,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
     }
   });
 
-  statusFields.forEach((field) => {
+  StatusFields.forEach((field) => {
     const min = url.searchParams.get(`${field}_min`);
     const max = url.searchParams.get(`${field}_max`);
 

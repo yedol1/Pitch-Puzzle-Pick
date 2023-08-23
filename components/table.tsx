@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setHeader, toggleOrder } from '@/app/lib/store/sort';
 import { useFetchPlayers } from '@/app/lib/reactQuery/useFetchPlayer';
 import { RootState } from '@/app/lib/store/reduxType';
+import { NullPlayerInfo } from '@/app/lib/constans';
 
 const AlignBtn = ({ header, order, currentHeader }: AlignBtnProps) => {
   const isSelected = header === currentHeader;
@@ -45,6 +46,7 @@ const Table = ({ isDisabled }: any) => {
       dispatch(setHeader(headerValue)); // Redux action 사용
     }
   };
+  console.log(data);
 
   return (
     <>
@@ -104,8 +106,12 @@ const Table = ({ isDisabled }: any) => {
           </tr>
         </thead>
         <tbody className={`${montserrat.className} text-sm font-normal font-medium leading-none tracking-tighter`}>
-          {data?.pages.map((pageData: any) =>
-            pageData.map((user: PlayerInfoType) => <TableRow user={user} key={user.UID} isDisabled={isDisabled} />),
+          {data?.pages[0].length ? (
+            data.pages.map((pageData: any) =>
+              pageData.map((user: PlayerInfoType) => <TableRow user={user} key={user.UID} isDisabled={isDisabled} />),
+            )
+          ) : (
+            <TableRow user={NullPlayerInfo} key={NullPlayerInfo.UID} isDisabled={isDisabled} />
           )}
         </tbody>
       </table>

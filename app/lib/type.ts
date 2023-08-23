@@ -9,9 +9,9 @@ export interface PlayerStatusType {
   OtB: number;
   Aer: number;
   Bal: number;
-  Ecc: string; // VARCHAR type
+  Ecc: number; // VARCHAR type
   Bra: number;
-  TRO: string; // VARCHAR type
+  TRO: number; // VARCHAR type
   Dri: number;
   Ldr: number;
   Str: number;

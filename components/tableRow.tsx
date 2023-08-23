@@ -29,9 +29,13 @@ const TableRow = ({ user, isDisabled = false }: any) => {
                     : 'bg-gradient-to-r from-excellentA to-excellentB'
                 }`}
         >
-          <p className='w-full truncate text-white text-base font-medium tracking-tighter text-center'>
-            {Math.ceil(user.CA / 2)}
-          </p>
+          {user.UID !== 0 ? (
+            <p className='w-full truncate text-white text-base font-medium tracking-tighter text-center'>
+              {Math.ceil(user.CA / 2)}
+            </p>
+          ) : (
+            <p className='w-full truncate text-white text-base font-medium tracking-tighter text-center'>{0}</p>
+          )}
         </div>
       </td>
       <td className='flex w-table py-0 pl-6 items-center space-x-1.5 pr-2'>
@@ -47,9 +51,13 @@ const TableRow = ({ user, isDisabled = false }: any) => {
                     : 'bg-gradient-to-r from-excellentA to-excellentB'
                 }`}
         >
-          <p className='w-full truncate text-white text-base font-medium tracking-tighter text-center'>
-            {Math.ceil(user.PA / 2)}
-          </p>
+          {user.UID !== 0 ? (
+            <p className='w-full truncate text-white text-base font-medium tracking-tighter text-center'>
+              {Math.ceil(user.PA / 2)}
+            </p>
+          ) : (
+            <p className='w-full truncate text-white text-base font-medium tracking-tighter text-center'>{0}</p>
+          )}
         </div>
       </td>
       <td
@@ -69,18 +77,30 @@ const TableRow = ({ user, isDisabled = false }: any) => {
         ) : (
           <Image src='/default.svg' width={32} height={32} alt='유저의 가상 이미지' />
         )}
-        <Link href={`/player/${user.UID}`}>
-          <p className='w-full truncate ml-2 hover:underline cursor-pointer'>{user.Name}</p>
-        </Link>
+        {user.UID !== 0 ? (
+          <Link href={`/player/${user.UID}`}>
+            <p className='w-full truncate ml-2 hover:underline cursor-pointer'>{user.Name}</p>
+          </Link>
+        ) : (
+          <p className='w-full truncate ml-2 hover:underline cursor-pointer'>선수정보가 없습니다.</p>
+        )}
       </td>
       <td className='hidden tableSalary:flex w-170 py-0 pl-6 items-center space-x-1.5 pr-2'>
-        <p className='w-full truncate'>{'주급 ' + formatValue(user.Salary) + ' 유로'}</p>
+        {user.UID !== 0 ? (
+          <p className='w-full truncate'>{'주급 ' + formatValue(user.Salary) + ' 유로'}</p>
+        ) : (
+          <p className='w-full truncate'>{'--'}</p>
+        )}
       </td>
       <td className='hidden tableAP:flex w-table py-0 pl-6 items-center space-x-1.5 pr-2'>
-        <p className='w-full truncate'>{formatValue(user.AP) + ' 유로'}</p>
+        {user.UID !== 0 ? (
+          <p className='w-full truncate'>{formatValue(user.AP) + ' 유로'}</p>
+        ) : (
+          <p className='w-full truncate'>{'--'}</p>
+        )}
       </td>
       <td className='hidden tableDOB:flex w-170 py-0 pl-6 items-center space-x-1.5 pr-2'>
-        <p className='w-full truncate'>{user.DOB}</p>
+        {user.UID !== 0 ? <p className='w-full truncate'>{user.DOB}</p> : <p className='w-full truncate'>{'--'}</p>}
       </td>
     </tr>
   );

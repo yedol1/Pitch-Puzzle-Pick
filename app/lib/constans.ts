@@ -1,6 +1,59 @@
-export const infoFields = ['CA', 'PA', 'AP', 'Salary', 'Age'];
-
-export const statusFields = [
+export const InfoFields = ['CA', 'PA', 'AP', 'Salary', 'Age'];
+export const FilterableFieldsKR = [
+  '현재 기량',
+  '잠재 기량',
+  '급료',
+  '시장가치',
+  '나이',
+  '활동',
+  '1대1',
+  '기술',
+  '결정',
+  '골킥',
+  '스로인',
+  '오프 더 볼',
+  'Aer',
+  '균형',
+  '기행',
+  '대담',
+  '돌진하는 경향',
+  '돌파',
+  '리더십',
+  '몸싸움',
+  '민첩',
+  '반사',
+  '트랩',
+  '핸들',
+  '위치',
+  '조율',
+  '순간 속도',
+  '승부',
+  '시야',
+  '예측',
+  '마크',
+  '스로인',
+  '적극',
+  '점프',
+  '주력',
+  '롱슛',
+  '지구력',
+  '집중력',
+  '천재성',
+  '침착',
+  '코너킥',
+  '크로스',
+  '타고난 체력',
+  '태클',
+  '팀워크',
+  '판단',
+  '패스',
+  '펀칭 빈도',
+  '장악',
+  'PK',
+  '프리킥',
+  '헤더',
+];
+export const StatusFields = [
   'Wor',
   'One',
   'Tec',
@@ -10,7 +63,9 @@ export const statusFields = [
   'OtB',
   'Aer',
   'Bal',
+  'Ecc',
   'Bra',
+  'TRO',
   'Dri',
   'Ldr',
   'Str',
@@ -48,7 +103,7 @@ export const statusFields = [
   'Hea',
 ];
 
-export const filterableFields = [
+export const FilterableFields = [
   'CA',
   'PA',
   'AP',
@@ -63,7 +118,9 @@ export const filterableFields = [
   'OtB',
   'Aer',
   'Bal',
+  'Ecc',
   'Bra',
+  'TRO',
   'Dri',
   'Ldr',
   'Str',
@@ -100,3 +157,7 @@ export const filterableFields = [
   'Fre',
   'Hea',
 ];
+
+export const NullPlayerInfo = {
+  UID: 0,
+};
