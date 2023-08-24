@@ -4,7 +4,7 @@ export const SET_FILTERS = 'filters/SET_FILTERS';
 export const ADD_SELECTED_FIELD = 'filters/ADD_SELECTED_FIELD';
 export const REMOVE_SELECTED_FIELD = 'filters/REMOVE_SELECTED_FIELD';
 
-export const setFilters = (filters: Filters): Action<Filters> => ({
+export const setFilters = (filters: any): Action<Filters> => ({
   type: SET_FILTERS,
   payload: filters,
 });
@@ -19,9 +19,10 @@ export const removeSelectedField = (field: string): Action<string> => ({
   payload: field,
 });
 
-const initialState: FiltersState = {
+const initialState: any = {
   filters: {
     Club: { value: '' },
+    DetailedPos: [],
   },
   selectedFields: [],
 };

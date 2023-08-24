@@ -1,6 +1,6 @@
 import { FetchPlayersArgs, PlayerInfoType, HeaderType, OrderType } from '@/app/lib/type';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { FilterableFields } from '../constans';
+import { FilterableFieldsParmas } from '../constans';
 
 const fetchPlayers = async ({ pageParam = undefined, selectedHeader, order, filters }: FetchPlayersArgs) => {
   // URL 기본 구조
@@ -13,7 +13,7 @@ const fetchPlayers = async ({ pageParam = undefined, selectedHeader, order, filt
     url.searchParams.append('UID', pageParam.toString());
   }
 
-  FilterableFields.forEach((field) => {
+  FilterableFieldsParmas.forEach((field) => {
     if (filters[field]) {
       if (filters[field].min) {
         url.searchParams.append(`${field}_min`, filters[field].min.toString());
@@ -26,6 +26,13 @@ const fetchPlayers = async ({ pageParam = undefined, selectedHeader, order, filt
       }
     }
   });
+
+  // DetailedPos 처리
+  if (filters.DetailedPos) {
+    filters.DetailedPos.forEach((pos: string) => {
+      url.searchParams.append('DetailedPos', pos);
+    });
+  }
 
   // 나머지 처리
   const response = await fetch(url.toString());

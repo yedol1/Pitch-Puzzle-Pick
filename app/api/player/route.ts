@@ -57,6 +57,21 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
     }
   });
 
+  const DetailedPos = url.searchParams.getAll('DetailedPos');
+  if (DetailedPos.length > 0) {
+    let filteredConditions: any[] = [];
+
+    DetailedPos.forEach((pos) => {
+      filteredConditions.push({
+        DetailedPos: {
+          contains: pos,
+        },
+      });
+    });
+
+    whereConditions.AND = filteredConditions;
+  }
+
   const users = await client.playerInfo.findMany({
     take: 11,
     ...(uid && { skip: 1, cursor: { UID: Number(uid) } }),

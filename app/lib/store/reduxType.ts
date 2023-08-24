@@ -13,6 +13,7 @@ export type FilterType = {
   value?: string;
 };
 
+// Update: Filter can be either a FilterType or a string array
 export type Filter = FilterType;
 
 export type RootState = {
