@@ -1,4 +1,4 @@
-import { Action, FiltersState, Filters, Filter } from './reduxType';
+import { Action, FiltersState, Filters, Filter, FilterType } from './reduxType';
 
 export const SET_FILTERS = 'filters/SET_FILTERS';
 export const ADD_SELECTED_FIELD = 'filters/ADD_SELECTED_FIELD';
@@ -20,7 +20,9 @@ export const removeSelectedField = (field: string): Action<string> => ({
 });
 
 const initialState: FiltersState = {
-  filters: {},
+  filters: {
+    Club: { value: '' },
+  },
   selectedFields: [],
 };
 
@@ -37,25 +39,9 @@ const filtersReducer = (state = initialState, action: Action<any>): FiltersState
         selectedFields: [...state.selectedFields, action.payload],
       };
     case REMOVE_SELECTED_FIELD:
-      const parts = action.payload.split('-');
-      const fieldKey = parts[0];
-      const filterType = parts[1] as 'min' | 'max';
-      const updatedFilters: {
-        [x: string]: Filter;
-      } = { ...state.filters };
-
-      if (updatedFilters[fieldKey]) {
-        delete updatedFilters[fieldKey][filterType];
-
-        if (Object.keys(updatedFilters[fieldKey]).length === 0) {
-          delete updatedFilters[fieldKey];
-        }
-      }
-
       return {
         ...state,
-        filters: updatedFilters,
-        selectedFields: state.selectedFields.filter((field) => field !== action.payload),
+        selectedFields: state.selectedFields.filter((field: string) => field !== action.payload),
       };
 
     default:

@@ -78,8 +78,9 @@ const TableRow = ({ user, isDisabled = false }: any) => {
           <Image src='/default.svg' width={32} height={32} alt='유저의 가상 이미지' />
         )}
         {user.UID !== 0 ? (
-          <Link href={`/player/${user.UID}`}>
-            <p className='w-full truncate ml-2 hover:underline cursor-pointer'>{user.Name}</p>
+          <Link href={`/player/${user.UID}`} className='hover:underline cursor-pointer'>
+            <p className='w-full truncate ml-2'>{user.Name}</p>
+            <p className='w-full truncate ml-2 text-[8px] mt-[4px] text-stone-300	'>{user.Position}</p>
           </Link>
         ) : (
           <p className='w-full truncate ml-2 hover:underline cursor-pointer'>선수정보가 없습니다.</p>

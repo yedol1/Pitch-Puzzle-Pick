@@ -7,10 +7,13 @@ export type Filters = {
   [key: string]: Filter;
 };
 
-export type Filter = {
+export type FilterType = {
   min?: number;
   max?: number;
+  value?: string;
 };
+
+export type Filter = FilterType;
 
 export type RootState = {
   filters: FiltersState;

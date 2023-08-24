@@ -1,6 +1,7 @@
 'use client';
 import { Provider } from 'react-redux';
 import store from './lib/store/store';
+import { ThemeProvider } from '@material-tailwind/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import SearchPage from '@/components/searchPage';
 
@@ -8,9 +9,11 @@ const queryClient = new QueryClient();
 const Home = () => {
   return (
     <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <SearchPage />
-      </QueryClientProvider>
+      <ThemeProvider>
+        <QueryClientProvider client={queryClient}>
+          <SearchPage />
+        </QueryClientProvider>
+      </ThemeProvider>
     </Provider>
   );
 };

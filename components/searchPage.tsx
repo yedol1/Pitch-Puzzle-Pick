@@ -3,7 +3,7 @@ import OptionSelect from '@/components/optionSelect';
 
 const SearchPage = () => {
   return (
-    <main>
+    <main className='w-fit-content flex flex-col justify-center items-center'>
       <OptionSelect />
       <Table isDisabled={true} />
       <div className='h-20'></div>

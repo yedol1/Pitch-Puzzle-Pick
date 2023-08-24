@@ -51,7 +51,7 @@ const Table = ({ isDisabled }: any) => {
   return (
     <>
       <table
-        className={`${notoSansKr.className} flex flex-col items-center rounded-lg mt-8 shadow-custom rounded-bl-lg rounded-br-lg`}
+        className={`${notoSansKr.className} flex w-fit-content flex-col items-center rounded-lg mt-8 shadow-custom rounded-bl-lg rounded-br-lg`}
       >
         <thead className='text-sm text-white font-normal font-medium leading-none tracking-tighter'>
           <tr className='flex h-42 bg-pri-color rounded-tl-lg rounded-tr-lg '>

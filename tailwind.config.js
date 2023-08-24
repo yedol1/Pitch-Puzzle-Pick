@@ -1,5 +1,7 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+const withMT = require('@material-tailwind/react/utils/withMT');
+
+module.exports = withMT({
   content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}', './app/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
@@ -45,11 +47,15 @@ module.exports = {
       },
       screens: {
         customNav: '740px',
+        Wrapper1: { min: '912px' },
+        Wrapper2: { min: '740px', max: '911px' },
+        Wrapper3: { min: '640px', max: '739px' },
         tableDOB: '912px',
         tableAP: '740px',
         tableSalary: '640px',
       },
       width: {
+        'fit-content': 'fit-content',
         93: '372px',
         'selet-option': '96px',
         table: '100px',
@@ -73,6 +79,7 @@ module.exports = {
       },
       fontSize: {
         48: '48px',
+        14: '14px',
       },
       fontFamily: {
         roboto: ['var(--font-roboto)'],
@@ -89,4 +96,4 @@ module.exports = {
       addUtilities(newUtilities, ['responsive', 'hover']);
     },
   ],
-};
+});

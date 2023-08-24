@@ -21,6 +21,9 @@ const fetchPlayers = async ({ pageParam = undefined, selectedHeader, order, filt
       if (filters[field].max) {
         url.searchParams.append(`${field}_max`, filters[field].max.toString());
       }
+      if (filters[field].value) {
+        url.searchParams.append(`${field}_value`, filters[field].value);
+      }
     }
   });
 

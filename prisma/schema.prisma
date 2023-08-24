@@ -30,6 +30,7 @@ model PlayerInfo {
   InjPr       Int?
   Cons        Int?
   Dirt        Int?
+  DetailedPos String?      @db.VarChar(512)
   status      PlayerStatus @relation(fields: [UID], references: [UID], onDelete: NoAction, onUpdate: NoAction, map: "PlayerInfo_ibfk_1")
 }
 

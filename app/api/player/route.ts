@@ -16,7 +16,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
   const column = url.searchParams.get('column') || 'CA';
   const order = url.searchParams.get('order') || 'desc';
   const uid = url.searchParams.get('UID') || '';
-  const validColumns = ['CA', 'PA', 'Name', 'Salary', 'AP'];
+  const validColumns = ['CA', 'PA', 'Name', 'Salary', 'AP', 'Club'];
   const validOrders = ['asc', 'desc'];
 
   if (!validColumns.includes(column) || !validOrders.includes(order)) {
@@ -28,12 +28,17 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
   InfoFields.forEach((field) => {
     const min = url.searchParams.get(`${field}_min`);
     const max = url.searchParams.get(`${field}_max`);
+    const value = url.searchParams.get(`${field}_value`);
 
     if (min || max) {
       whereConditions[field] = {
         ...(min && { gte: Number(min) }),
         ...(max && { lte: Number(max) }),
       };
+    }
+
+    if (value) {
+      whereConditions[field] = { ...whereConditions[field], contains: value };
     }
   });
 
