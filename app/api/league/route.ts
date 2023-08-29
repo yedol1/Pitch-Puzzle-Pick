@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
+import { koreanSort } from '@/app/lib/hook';
 
 const client = new PrismaClient();
 
@@ -17,7 +18,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
     distinct: ['LeagueNat'],
   });
   // 각 결과 항목에서 LeagueNat 값을 추출하여 새 배열에 푸시
-  const result = leagueNatResults.map((item) => item.LeagueNat);
+  const result = leagueNatResults.map((item) => item.LeagueNat).sort(koreanSort);
 
   return NextResponse.json(result);
 }

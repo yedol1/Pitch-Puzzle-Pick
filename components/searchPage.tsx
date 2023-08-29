@@ -6,7 +6,7 @@ const SearchPage = () => {
     <main className='w-fit-content flex flex-col justify-center items-center'>
       <OptionSelect />
       <Table isDisabled={true} />
-      <div className='h-20'></div>
+      <div className='h-[10px]'></div>
     </main>
   );
 };

@@ -1,4 +1,4 @@
-export const InfoFields = ['CA', 'PA', 'AP', 'Salary', 'Age', 'Club'];
+export const InfoFields = ['CA', 'PA', 'AP', 'Salary', 'Age', 'Club', 'Based', 'LeagueNat', 'Name'];
 export const FilterableFieldsKR = [
   ['현재능력', ' [범위:0~200]'],
   ['잠재능력', ' [범위:0~200]'],
@@ -107,7 +107,7 @@ export const StatusFields = [
 ];
 
 export const FilterableFields = [
-  'Club',
+  'Name',
   'CA',
   'PA',
   'AP',
@@ -161,8 +161,10 @@ export const FilterableFields = [
   'Fre',
   'Hea',
 ];
+
+export const BelongFields = ['LeagueNat', 'Based', 'Club'];
 export const FilterableFieldsParmas = [
-  'Club',
+  'Name',
   'CA',
   'PA',
   'AP',

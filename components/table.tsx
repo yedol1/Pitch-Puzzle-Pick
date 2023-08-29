@@ -37,7 +37,7 @@ const Table = ({ isDisabled }: any) => {
   const order = useSelector((state: RootState) => state.table.order);
   const filters = useSelector((state: RootState) => state.filters.filters);
   // 상태와 함께 데이터 가져오기
-  const { data, hasNextPage, fetchNextPage } = useFetchPlayers(selectedHeader, order, filters);
+  const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useFetchPlayers(selectedHeader, order, filters);
 
   const handleClick = (headerValue: HeaderType) => {
     if (selectedHeader === headerValue) {
@@ -46,7 +46,7 @@ const Table = ({ isDisabled }: any) => {
       dispatch(setHeader(headerValue)); // Redux action 사용
     }
   };
-  console.log(data);
+  console.log('다음페이지있음?', hasNextPage);
 
   return (
     <>

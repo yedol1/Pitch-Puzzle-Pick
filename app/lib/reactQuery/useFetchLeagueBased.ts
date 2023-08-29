@@ -1,8 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
 
-const fetchLeaguesBased = async () => {
-  const url = new URL(`/api/league`, location.origin);
-
+const fetchLeaguesBased = async (nat: string) => {
+  const url = new URL(`/api/league/based`, location.origin);
+  if (nat !== '') {
+    url.searchParams.append('LeagueNat', nat);
+  }
   const response = await fetch(url.toString());
   if (!response.ok) {
     throw new Error('Network response was not ok');
@@ -11,8 +13,8 @@ const fetchLeaguesBased = async () => {
   return response.json();
 };
 
-export function useFetchLeagueBased() {
-  const queryResult = useQuery<any>(['leagues'], () => fetchLeaguesBased());
+export function useFetchLeagueBased(nat: string) {
+  const queryResult = useQuery<any>(['leaguesBased', nat], () => fetchLeaguesBased(nat));
 
   return queryResult;
 }

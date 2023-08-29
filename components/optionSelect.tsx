@@ -8,6 +8,8 @@ import { FilterableFields, FilterableFieldsKR } from '@/app/lib/constans';
 import { RootState } from '@/app/lib/store/reduxType';
 import { Tooltip, Typography, Button, Chip, Input, Checkbox } from '@material-tailwind/react';
 import { useFetchLeagueNat } from '@/app/lib/reactQuery/useFetchLeagueNat';
+import { useFetchLeagueBased } from '@/app/lib/reactQuery/useFetchLeagueBased';
+import { useFetchLeagueClub } from '@/app/lib/reactQuery/useFetchLeagueClub';
 
 // 타입 지정
 type Option = {
@@ -28,7 +30,7 @@ const OptionSelect = () => {
   const selectedBelong = useSelector((state: RootState) => state.filters.filters.Belong);
   console.log(selectedBelong);
   // select option ( 최대 최소 필터링 옵션 )
-  const filteredFields = FilterableFields.filter((field) => field !== 'Club');
+  const filteredFields = FilterableFields.filter((field) => field !== 'Name');
   const fields = filteredFields.map((field, index) => [field, FilterableFieldsKR[index]]);
   const options = fields.flatMap((fieldPair) => [
     { value: `${fieldPair[0]}-min`, type: 'min', label: `${fieldPair[1][0]} (Min)` },
@@ -45,8 +47,9 @@ const OptionSelect = () => {
         setFilters({
           ...actualFilters,
           Belong: {
-            ...actualFilters.Belong, // 현재 Belong의 속성들을 유지하면서,
-            LeagueNat: value, // LeagueNat만 업데이트
+            LeagueNat: value,
+            Based: '',
+            Club: '',
           },
         }),
       );
@@ -55,13 +58,76 @@ const OptionSelect = () => {
         setFilters({
           ...actualFilters,
           Belong: {
-            ...actualFilters.Belong,
             LeagueNat: '',
+            Based: '',
+            Club: '',
           },
         }),
       );
     }
   };
+
+  // select option ( 소속 리그 필터링 옵션 )
+  const { data: leagueBasedData, isLoading: basedIsLoading } = useFetchLeagueBased(selectedBelong?.LeagueNat.value);
+  const basedOption = leagueBasedData?.map((item: any) => ({ value: item, label: item })) || [];
+
+  const handleBasedOnchange = (value: SingleValue<OptionBelong>, actionMeta: ActionMeta<OptionBelong>) => {
+    if (value) {
+      dispatch(
+        setFilters({
+          ...actualFilters,
+          Belong: {
+            ...selectedBelong,
+            Based: value,
+            Club: '',
+          },
+        }),
+      );
+    } else {
+      dispatch(
+        setFilters({
+          ...actualFilters,
+          Belong: {
+            ...selectedBelong,
+            Based: '',
+            Club: '',
+          },
+        }),
+      );
+    }
+  };
+
+  const { data: clubData, isLoading: clubIsLoading } = useFetchLeagueClub(
+    selectedBelong?.Based.value,
+    selectedBelong?.LeagueNat.value,
+  );
+  const clubOption = clubData?.map((item: any) => ({ value: item, label: item })) || [];
+
+  const handleClubOnchange = (value: SingleValue<OptionBelong>, actionMeta: ActionMeta<OptionBelong>) => {
+    if (value) {
+      dispatch(
+        setFilters({
+          ...actualFilters,
+          Belong: {
+            ...selectedBelong,
+            Club: value,
+          },
+        }),
+      );
+    } else {
+      dispatch(
+        setFilters({
+          ...actualFilters,
+          Belong: {
+            ...selectedBelong,
+            Club: '',
+          },
+        }),
+      );
+    }
+  };
+
+  console.log(clubData);
 
   // 선택된 옵션들 처리
   const handleOptionChange = (selectedOptions: MultiValue<{ value: string; type: string; label: string }> | null) => {
@@ -88,9 +154,9 @@ const OptionSelect = () => {
   };
   console.log(selectedFields);
 
-  const handleClubChange = (value: string) => {
+  const handleNameChange = (value: string) => {
     // 바로바로 dispatch
-    const updatedFilters = { ...actualFilters, Club: { value } };
+    const updatedFilters = { ...actualFilters, Name: { value } };
     dispatch(setFilters(updatedFilters));
   };
 
@@ -102,7 +168,7 @@ const OptionSelect = () => {
   };
 
   const handleFilterChange = (field: string, type: 'min' | 'max', value: number) => {
-    if (field !== 'Club') {
+    if (field !== 'Name') {
       const updatedFilters = {
         ...actualFilters,
         [field]: {
@@ -160,214 +226,238 @@ const OptionSelect = () => {
   };
 
   return (
-    <section className='mt-[48px] flex Wrapper1:w-[880px] Wrapper2:w-[710px] Wrapper3:w-[610px] w-[440px] p-4 flex-col justify-center items-end rounded-lg bg-white shadow-custom'>
-      <div className='flex w-full justify-center items-start content-start flex-wrap gap-x-[128px] self-stretch'>
-        {/* 문자열 옵션 선택 박스 */}
+    <>
+      <Input
+        id='NameFilter'
+        size='md'
+        color='blue'
+        label='Input Name'
+        type='text'
+        className='bg-white'
+        value={actualFilters.Name.value || ''}
+        onChange={(e) => handleNameChange(e.target.value)}
+      />
+      <section className='mt-[48px] flex Wrapper1:w-[880px] Wrapper2:w-[710px] Wrapper3:w-[610px] w-[440px] p-4 flex-col justify-center items-end rounded-lg bg-white shadow-custom'>
+        <div className='flex w-full justify-center items-start content-start flex-wrap gap-x-[128px] self-stretch'>
+          {/* 문자열 옵션 선택 박스 */}
 
-        <div className='flex w-option-container flex-col items-start space-y-6'>
-          {/* 클럽 검색창 */}
-          <div className='flex w-option-container flex-col items-start space-y-2'>
-            <p className='text-xl font-semibold leading-7 w-text-area h-7 tracking-option'>{'Club :'}</p>
-
-            <Select
-              instanceId='option-select'
-              options={natOption}
-              placeholder='소속 나라'
-              isLoading={natIsLoading}
-              isClearable={true}
-              onChange={handleNatOnchange}
-              className='w-[176px] h-[38px]'
-            />
-            {/* <label className='text-xl font-semibold leading-7 w-text-area h-7 tracking-option' htmlFor='clubFilter'>
-              {'Club:'}
-            </label>
-            <Input
-              id='clubFilter'
-              size='md'
-              color='blue'
-              label='Input Club (KR)'
-              type='text'
-              value={actualFilters.Club.value || ''}
-              onChange={(e) => handleClubChange(e.target.value)}
-            /> */}
-          </div>
-          <div className='flex flex-col w-[360px] items-start space-y-2'>
-            <p className='text-xl font-semibold leading-7 w-text-area h-7 tracking-option'>{'Position :'}</p>
-            <div className='flex flex-col items-start space-y-7 self-stretch'>
-              <div className='flex justify-center items-start self-stretch'>
-                <div className='flex w-[120px] justify-center items-center space-x-2'>
-                  <Checkbox label='ST' color='red' onClick={() => handlePosChange('STC')} />
-                </div>
-              </div>
-              <div className='flex justify-center items-start self-stretch'>
-                <div className='flex w-[120px] justify-center items-center space-x-2'>
-                  <Checkbox label='AML' color='blue' onClick={() => handlePosChange('AML')} />
-                </div>
-                <div className='flex w-[120px] justify-center items-center space-x-2'>
-                  <Checkbox label='AMC' color='blue' onClick={() => handlePosChange('AMC')} />
-                </div>
-                <div className='flex w-[120px] justify-center items-center space-x-2'>
-                  <Checkbox label='AMR' color='blue' onClick={() => handlePosChange('AMR')} />
-                </div>
-              </div>
-              <div className='flex justify-center items-start self-stretch'>
-                <div className='flex w-[120px] justify-center items-center space-x-2'>
-                  <Checkbox label='ML' color='blue' onClick={() => handlePosChange('ML')} />
-                </div>
-                <div className='flex w-[120px] justify-center items-center space-x-2'>
-                  <Checkbox label='MC' color='blue' onClick={() => handlePosChange('MC')} />
-                </div>
-                <div className='flex w-[120px] justify-center items-center space-x-2'>
-                  <Checkbox label='MR' color='blue' onClick={() => handlePosChange('MR')} />
-                </div>
-              </div>
-              <div className='flex justify-center items-start self-stretch'>
-                <div className='flex w-[120px] justify-center items-center space-x-2'>
-                  <Checkbox label='WBL' color='green' onClick={() => handlePosChange('WBL')} />
-                </div>
-                <div className='flex w-[120px] justify-center items-center space-x-2'>
-                  <Checkbox label='DM' color='blue' onClick={() => handlePosChange('CDM')} />
-                </div>
-                <div className='flex w-[120px] justify-center items-center space-x-2'>
-                  <Checkbox label='WBR' color='green' onClick={() => handlePosChange('WBR')} />
-                </div>
-              </div>
-              <div className='flex justify-center items-start self-stretch'>
-                <div className='flex w-[120px] justify-center items-center space-x-2'>
-                  <Checkbox label='DL' color='green' onClick={() => handlePosChange('DL')} />
-                </div>
-                <div className='flex w-[120px] justify-center items-center space-x-2'>
-                  <Checkbox label='DC' color='green' onClick={() => handlePosChange('DC')} />
-                </div>
-                <div className='flex w-[120px] justify-center items-center space-x-2'>
-                  <Checkbox label='DR' color='green' onClick={() => handlePosChange('DR')} />
-                </div>
-              </div>
-              <div className='flex justify-center items-start self-stretch'>
-                <div className='flex w-[120px] justify-center items-center space-x-2'>
-                  <Checkbox label='GK' color='green' onClick={() => handlePosChange('GK')} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        {/* 숫자형 옵션 선택 박스 */}
-        <div className='flex flex-col items-end w-[360px]'>
-          {/* 옵션선택창 */}
-          <div className='flex w-option-container flex-col items-start space-y-2'>
-            <p className='text-xl font-semibold leading-7 w-text-area h-7 tracking-option'>{'Values :'}</p>
-            <div className='flex w-option-container flex-col items-end space-y-4 self-stretch'>
-              <div className='w-option-container select-container'>
-                <Select<Option, true>
+          <div className='flex w-option-container flex-col items-start space-y-6'>
+            {/* 클럽 검색창 */}
+            <div className='flex w-option-container flex-col items-start space-y-2'>
+              <p className='text-xl font-semibold leading-7 w-text-area h-7 tracking-option'>{'Club :'}</p>
+              <div className='flex flex-row w-full justify-between'>
+                <Select
                   instanceId='option-select'
-                  isMulti
-                  options={options}
-                  placeholder='Select field'
-                  onChange={handleOptionChange}
-                  value={typeof tempSelectedOptions !== 'undefined' ? tempSelectedOptions : []}
+                  options={natOption}
+                  placeholder='나라 선택'
+                  isLoading={natIsLoading}
+                  isClearable={true}
+                  onChange={handleNatOnchange}
+                  value={selectedBelong?.LeagueNat}
+                  className='w-[176px] h-[38px]'
+                />
+                <Select
+                  instanceId='option-select'
+                  options={basedOption}
+                  placeholder='리그 선택'
+                  isLoading={basedIsLoading}
+                  isClearable={true}
+                  onChange={handleBasedOnchange}
+                  value={selectedBelong?.Based}
+                  className='w-[176px] h-[38px]'
+                  isDisabled={!selectedBelong?.LeagueNat}
                 />
               </div>
-              {selectedFields.map((fieldWithType) => {
-                console.log(fieldWithType);
-                const parts = fieldWithType.split('-');
-                const field = parts[0];
-                const type = parts[1] as 'min' | 'max';
-                const uiField = fields.find((item) => item[0] === field)?.[1][0] || field;
-                const tooltip = fields.find((item) => item[0] === field)?.[1][1] || '';
-                return (
-                  <div key={fieldWithType} className='filter-item'>
-                    <div className='flex justify-end space-x-4 self-stretch'>
-                      <Chip
-                        className='text-center p-0 pl-2 pr-2'
-                        variant='ghost'
-                        color='blue-gray'
-                        size='md'
-                        value={
-                          <div className='w-fill flex items-center justify-center gap-[2px]'>
-                            <Tooltip
-                              placement='bottom'
-                              className='border border-blue-gray-50 bg-white px-4 py-3 shadow-md shadow-black/10'
-                              content={
-                                <div className='w-full'>
-                                  <Typography color='blue-gray' className='font-medium text-[16px]'>
-                                    {uiField}
-                                  </Typography>
-                                  <Typography
-                                    variant='small'
-                                    color='blue-gray'
-                                    className='font-normal text-[12px] opacity-80'
-                                  >
-                                    {tooltip}
-                                  </Typography>
-                                </div>
-                              }
-                            >
-                              <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                fill='none'
-                                viewBox='0 0 24 24'
-                                stroke='currentColor'
-                                strokeWidth={2}
-                                className='h-4 w-4 cursor-pointer text-blue-gray-500'
-                              >
-                                <path
-                                  strokeLinecap='round'
-                                  strokeLinejoin='round'
-                                  d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
-                                />
-                              </svg>
-                            </Tooltip>
-                            <p className='w-[82px] text-[12px] font-normal leading-6 tracking-tight truncate'>
-                              {uiField} ({type === 'min' ? 'Min' : 'Max'})
-                            </p>
-                          </div>
-                        }
-                      />
-                      <div className='flex w-select-option justify-end items-center space-x-2 self-stretch relative'>
-                        <button
-                          type='button'
-                          className='font-semibold bg-normalA hover:bg-normalB text-white h-7 w-7 flex rounded focus:outline-none cursor-pointer'
-                          onClick={() => adjustValue(field, type, false)}
-                        >
-                          <span className='m-auto'>-</span>
-                        </button>
-                        <div className='bg-transparent w-10 text-xs md:text-base flex items-center justify-center cursor-default'>
-                          <input
-                            type='number'
-                            className='bg-transparent w-full text-xs md:text-base text-center flex items-center justify-center cursor-text'
-                            value={actualFilters[field]?.[type] || ''}
-                            onChange={(e) => handleInputChange(field, type, e.target.value)}
-                            min={0}
-                            placeholder='-'
-                          />
-                        </div>
-                        <button
-                          type='button'
-                          className='font-semibold bg-normalA hover:bg-normalB text-white h-7 w-7 flex rounded focus:outline-none cursor-pointer'
-                          onClick={() => adjustValue(field, type, true)}
-                        >
-                          <span className='m-auto'>+</span>
-                        </button>
-                      </div>
-                      <Button
-                        onClick={() => handleDeleteField(fieldWithType)}
-                        className='cursor-pointer w-[83px] h-[32px] shadow-none bg-gradient-to-t from-[#BF1616] to-[#AE0F0F] flex items-center justify-center hover:brightness-75 text-white rounded-md gap-[6px]'
-                        variant='text'
-                        ripple={false}
-                      >
-                        {/* <Image src='/del.svg' width={83} height={32} alt='삭제버튼' /> */}
-                        <Image src='/minus.svg' width={24} height={24} alt='삭제버튼' />
-                        <p className='font-sans text-sm font-medium'>{'DEL'}</p>
-                      </Button>
-                    </div>
+              <Select
+                instanceId='option-select'
+                options={clubOption}
+                placeholder='클럽 선택'
+                isLoading={clubIsLoading}
+                isClearable={true}
+                onChange={handleClubOnchange}
+                value={selectedBelong?.Club}
+                className='w-full h-[38px]'
+                isDisabled={!selectedBelong?.Based}
+              />
+            </div>
+            <div className='flex flex-col w-[360px] items-start space-y-2'>
+              <p className='text-xl font-semibold leading-7 w-text-area h-7 tracking-option'>{'Position :'}</p>
+              <div className='flex flex-col items-start space-y-7 self-stretch'>
+                <div className='flex justify-center items-start self-stretch'>
+                  <div className='flex w-[120px] justify-center items-center space-x-2'>
+                    <Checkbox label='ST' color='red' onClick={() => handlePosChange('STC')} />
                   </div>
-                );
-              })}
+                </div>
+                <div className='flex justify-center items-start self-stretch'>
+                  <div className='flex w-[120px] justify-center items-center space-x-2'>
+                    <Checkbox label='AML' color='blue' onClick={() => handlePosChange('AML')} />
+                  </div>
+                  <div className='flex w-[120px] justify-center items-center space-x-2'>
+                    <Checkbox label='AMC' color='blue' onClick={() => handlePosChange('AMC')} />
+                  </div>
+                  <div className='flex w-[120px] justify-center items-center space-x-2'>
+                    <Checkbox label='AMR' color='blue' onClick={() => handlePosChange('AMR')} />
+                  </div>
+                </div>
+                <div className='flex justify-center items-start self-stretch'>
+                  <div className='flex w-[120px] justify-center items-center space-x-2'>
+                    <Checkbox label='ML' color='blue' onClick={() => handlePosChange('ML')} />
+                  </div>
+                  <div className='flex w-[120px] justify-center items-center space-x-2'>
+                    <Checkbox label='MC' color='blue' onClick={() => handlePosChange('MC')} />
+                  </div>
+                  <div className='flex w-[120px] justify-center items-center space-x-2'>
+                    <Checkbox label='MR' color='blue' onClick={() => handlePosChange('MR')} />
+                  </div>
+                </div>
+                <div className='flex justify-center items-start self-stretch'>
+                  <div className='flex w-[120px] justify-center items-center space-x-2'>
+                    <Checkbox label='WBL' color='green' onClick={() => handlePosChange('WBL')} />
+                  </div>
+                  <div className='flex w-[120px] justify-center items-center space-x-2'>
+                    <Checkbox label='DM' color='blue' onClick={() => handlePosChange('CDM')} />
+                  </div>
+                  <div className='flex w-[120px] justify-center items-center space-x-2'>
+                    <Checkbox label='WBR' color='green' onClick={() => handlePosChange('WBR')} />
+                  </div>
+                </div>
+                <div className='flex justify-center items-start self-stretch'>
+                  <div className='flex w-[120px] justify-center items-center space-x-2'>
+                    <Checkbox label='DL' color='green' onClick={() => handlePosChange('DL')} />
+                  </div>
+                  <div className='flex w-[120px] justify-center items-center space-x-2'>
+                    <Checkbox label='DC' color='green' onClick={() => handlePosChange('DC')} />
+                  </div>
+                  <div className='flex w-[120px] justify-center items-center space-x-2'>
+                    <Checkbox label='DR' color='green' onClick={() => handlePosChange('DR')} />
+                  </div>
+                </div>
+                <div className='flex justify-center items-start self-stretch'>
+                  <div className='flex w-[120px] justify-center items-center space-x-2'>
+                    <Checkbox label='GK' color='green' onClick={() => handlePosChange('GK')} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* 숫자형 옵션 선택 박스 */}
+          <div className='flex flex-col items-end w-[360px]'>
+            {/* 옵션선택창 */}
+            <div className='flex w-option-container flex-col items-start space-y-2'>
+              <p className='text-xl font-semibold leading-7 w-text-area h-7 tracking-option'>{'Values :'}</p>
+              <div className='flex w-option-container flex-col items-end space-y-4 self-stretch'>
+                <div className='w-option-container select-container'>
+                  <Select<Option, true>
+                    instanceId='option-select'
+                    isMulti
+                    options={options}
+                    placeholder='Select field'
+                    onChange={handleOptionChange}
+                    value={typeof tempSelectedOptions !== 'undefined' ? tempSelectedOptions : []}
+                  />
+                </div>
+                {selectedFields.map((fieldWithType) => {
+                  console.log(fieldWithType);
+                  const parts = fieldWithType.split('-');
+                  const field = parts[0];
+                  const type = parts[1] as 'min' | 'max';
+                  const uiField = fields.find((item) => item[0] === field)?.[1][0] || field;
+                  const tooltip = fields.find((item) => item[0] === field)?.[1][1] || '';
+                  return (
+                    <div key={fieldWithType} className='filter-item'>
+                      <div className='flex justify-end space-x-4 self-stretch'>
+                        <Chip
+                          className='text-center p-0 pl-2 pr-2'
+                          variant='ghost'
+                          color='blue-gray'
+                          size='md'
+                          value={
+                            <div className='w-fill flex items-center justify-center gap-[2px]'>
+                              <Tooltip
+                                placement='bottom'
+                                className='border border-blue-gray-50 bg-white px-4 py-3 shadow-md shadow-black/10'
+                                content={
+                                  <div className='w-full'>
+                                    <Typography color='blue-gray' className='font-medium text-[16px]'>
+                                      {uiField}
+                                    </Typography>
+                                    <Typography
+                                      variant='small'
+                                      color='blue-gray'
+                                      className='font-normal text-[12px] opacity-80'
+                                    >
+                                      {tooltip}
+                                    </Typography>
+                                  </div>
+                                }
+                              >
+                                <svg
+                                  xmlns='http://www.w3.org/2000/svg'
+                                  fill='none'
+                                  viewBox='0 0 24 24'
+                                  stroke='currentColor'
+                                  strokeWidth={2}
+                                  className='h-4 w-4 cursor-pointer text-blue-gray-500'
+                                >
+                                  <path
+                                    strokeLinecap='round'
+                                    strokeLinejoin='round'
+                                    d='M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z'
+                                  />
+                                </svg>
+                              </Tooltip>
+                              <p className='w-[82px] text-[12px] font-normal leading-6 tracking-tight truncate'>
+                                {uiField} ({type === 'min' ? 'Min' : 'Max'})
+                              </p>
+                            </div>
+                          }
+                        />
+                        <div className='flex w-select-option justify-end items-center space-x-2 self-stretch relative'>
+                          <button
+                            type='button'
+                            className='font-semibold bg-normalA hover:bg-normalB text-white h-7 w-7 flex rounded focus:outline-none cursor-pointer'
+                            onClick={() => adjustValue(field, type, false)}
+                          >
+                            <span className='m-auto'>-</span>
+                          </button>
+                          <div className='bg-transparent w-10 text-xs md:text-base flex items-center justify-center cursor-default'>
+                            <input
+                              type='number'
+                              className='bg-transparent w-full text-xs md:text-base text-center flex items-center justify-center cursor-text'
+                              value={actualFilters[field]?.[type] || ''}
+                              onChange={(e) => handleInputChange(field, type, e.target.value)}
+                              min={0}
+                              placeholder='-'
+                            />
+                          </div>
+                          <button
+                            type='button'
+                            className='font-semibold bg-normalA hover:bg-normalB text-white h-7 w-7 flex rounded focus:outline-none cursor-pointer'
+                            onClick={() => adjustValue(field, type, true)}
+                          >
+                            <span className='m-auto'>+</span>
+                          </button>
+                        </div>
+                        <Button
+                          onClick={() => handleDeleteField(fieldWithType)}
+                          className='cursor-pointer w-[83px] h-[32px] shadow-none bg-gradient-to-t from-[#BF1616] to-[#AE0F0F] flex items-center justify-center hover:brightness-75 text-white rounded-md gap-[6px]'
+                          variant='text'
+                          ripple={false}
+                        >
+                          {/* <Image src='/del.svg' width={83} height={32} alt='삭제버튼' /> */}
+                          <Image src='/minus.svg' width={24} height={24} alt='삭제버튼' />
+                          <p className='font-sans text-sm font-medium'>{'DEL'}</p>
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 
