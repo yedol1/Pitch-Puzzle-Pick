@@ -32,6 +32,6 @@ export type LastUIDState = {
 };
 
 export type FiltersState = {
-  filters: Filters;
+  filters: any;
   selectedFields: string[];
 };

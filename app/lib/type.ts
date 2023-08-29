@@ -51,8 +51,8 @@ export interface PlayerStatusType {
 
 export interface PlayerInfoType {
   UID: number;
+  LeagueNat?: string; // VARCHAR type
   Based?: string; // VARCHAR type
-  Division?: string; // VARCHAR type
   Club?: string; // VARCHAR type
   Name?: string; // VARCHAR type
   CA?: number;
@@ -72,6 +72,7 @@ export interface PlayerInfoType {
   InjPr?: number;
   Cons?: number;
   Dirt?: number;
+  DetailedPos?: string; // VARCHAR type
   // Note: The foreign key relationship is not represented in the type.
   // This would be managed by the database and ORM, not TypeScript.
 }

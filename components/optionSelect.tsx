@@ -1,12 +1,13 @@
 // 입력하자마자 바로바로 dispatch 되는 필터링 옵션 선택창
 import React, { use, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Select, { MultiValue } from 'react-select';
+import Select, { MultiValue, ActionMeta, SingleValue } from 'react-select';
 import Image from 'next/image';
 import { setFilters, addSelectedField, removeSelectedField } from '@/app/lib/store/filters';
 import { FilterableFields, FilterableFieldsKR } from '@/app/lib/constans';
 import { RootState } from '@/app/lib/store/reduxType';
 import { Tooltip, Typography, Button, Chip, Input, Checkbox } from '@material-tailwind/react';
+import { useFetchLeagueNat } from '@/app/lib/reactQuery/useFetchLeagueNat';
 
 // 타입 지정
 type Option = {
@@ -15,16 +16,52 @@ type Option = {
   label: string;
 };
 
+type OptionBelong = {
+  value: string;
+  label: string;
+};
+
 const OptionSelect = () => {
   const dispatch = useDispatch();
   const { filters: actualFilters } = useSelector((state: RootState) => state.filters);
   const selectedFields = useSelector((state: RootState) => state.filters.selectedFields);
+  const selectedBelong = useSelector((state: RootState) => state.filters.filters.Belong);
+  console.log(selectedBelong);
+  // select option ( 최대 최소 필터링 옵션 )
   const filteredFields = FilterableFields.filter((field) => field !== 'Club');
   const fields = filteredFields.map((field, index) => [field, FilterableFieldsKR[index]]);
   const options = fields.flatMap((fieldPair) => [
     { value: `${fieldPair[0]}-min`, type: 'min', label: `${fieldPair[1][0]} (Min)` },
     { value: `${fieldPair[0]}-max`, type: 'max', label: `${fieldPair[1][0]} (Max)` },
   ]);
+
+  // select option ( 국가 필터링 옵션 )
+  const { data: leagueNatData, isLoading: natIsLoading } = useFetchLeagueNat();
+  const natOption = leagueNatData?.map((item: any) => ({ value: item, label: item })) || [];
+
+  const handleNatOnchange = (value: SingleValue<OptionBelong>, actionMeta: ActionMeta<OptionBelong>) => {
+    if (value) {
+      dispatch(
+        setFilters({
+          ...actualFilters,
+          Belong: {
+            ...actualFilters.Belong, // 현재 Belong의 속성들을 유지하면서,
+            LeagueNat: value, // LeagueNat만 업데이트
+          },
+        }),
+      );
+    } else {
+      dispatch(
+        setFilters({
+          ...actualFilters,
+          Belong: {
+            ...actualFilters.Belong,
+            LeagueNat: '',
+          },
+        }),
+      );
+    }
+  };
 
   // 선택된 옵션들 처리
   const handleOptionChange = (selectedOptions: MultiValue<{ value: string; type: string; label: string }> | null) => {
@@ -126,10 +163,22 @@ const OptionSelect = () => {
     <section className='mt-[48px] flex Wrapper1:w-[880px] Wrapper2:w-[710px] Wrapper3:w-[610px] w-[440px] p-4 flex-col justify-center items-end rounded-lg bg-white shadow-custom'>
       <div className='flex w-full justify-center items-start content-start flex-wrap gap-x-[128px] self-stretch'>
         {/* 문자열 옵션 선택 박스 */}
+
         <div className='flex w-option-container flex-col items-start space-y-6'>
           {/* 클럽 검색창 */}
           <div className='flex w-option-container flex-col items-start space-y-2'>
-            <label className='text-xl font-semibold leading-7 w-text-area h-7 tracking-option' htmlFor='clubFilter'>
+            <p className='text-xl font-semibold leading-7 w-text-area h-7 tracking-option'>{'Club :'}</p>
+
+            <Select
+              instanceId='option-select'
+              options={natOption}
+              placeholder='소속 나라'
+              isLoading={natIsLoading}
+              isClearable={true}
+              onChange={handleNatOnchange}
+              className='w-[176px] h-[38px]'
+            />
+            {/* <label className='text-xl font-semibold leading-7 w-text-area h-7 tracking-option' htmlFor='clubFilter'>
               {'Club:'}
             </label>
             <Input
@@ -140,7 +189,7 @@ const OptionSelect = () => {
               type='text'
               value={actualFilters.Club.value || ''}
               onChange={(e) => handleClubChange(e.target.value)}
-            />
+            /> */}
           </div>
           <div className='flex flex-col w-[360px] items-start space-y-2'>
             <p className='text-xl font-semibold leading-7 w-text-area h-7 tracking-option'>{'Position :'}</p>
@@ -333,7 +382,6 @@ export default OptionSelect;
 // import { FilterableFields, FilterableFieldsKR } from '@/app/lib/constans';
 // import { Filters, RootState } from '@/app/lib/store/reduxType';
 // import { Tooltip, Typography, Button, Chip, Input } from '@material-tailwind/react';
-
 // // 타입 지정
 // type Option = {
 //   value: string;

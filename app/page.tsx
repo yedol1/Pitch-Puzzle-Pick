@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import store from './lib/store/store';
 import { ThemeProvider } from '@material-tailwind/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import SearchPage from '@/components/searchPage';
 
 const queryClient = new QueryClient();
@@ -12,6 +13,7 @@ const Home = () => {
       <ThemeProvider>
         <QueryClientProvider client={queryClient}>
           <SearchPage />
+          <ReactQueryDevtools />
         </QueryClientProvider>
       </ThemeProvider>
     </Provider>

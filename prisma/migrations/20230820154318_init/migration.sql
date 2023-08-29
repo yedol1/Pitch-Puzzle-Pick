@@ -1,8 +1,8 @@
 -- CreateTable
 CREATE TABLE `PlayerInfo` (
     `UID` INTEGER NOT NULL,
+    `NatLeague` VARCHAR(512) NULL,
     `Based` VARCHAR(512) NULL,
-    `Division` VARCHAR(512) NULL,
     `Club` VARCHAR(512) NULL,
     `Name` VARCHAR(512) NULL,
     `CA` INTEGER NULL,
@@ -22,6 +22,7 @@ CREATE TABLE `PlayerInfo` (
     `InjPr` INTEGER NULL,
     `Cons` INTEGER NULL,
     `Dirt` INTEGER NULL,
+    `DatailedPos` VARCHAR(512) NULL,
 
     UNIQUE INDEX `PlayerInfo_UID_key`(`UID`),
     PRIMARY KEY (`UID`)

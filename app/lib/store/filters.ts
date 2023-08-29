@@ -22,6 +22,11 @@ export const removeSelectedField = (field: string): Action<string> => ({
 const initialState: any = {
   filters: {
     Club: { value: '' },
+    Belong: {
+      LeagueNat: '',
+      Based: '',
+      Club: '',
+    },
     DetailedPos: [],
   },
   selectedFields: [],

@@ -9,8 +9,8 @@ datasource db {
 
 model PlayerInfo {
   UID         Int          @id @unique(map: "UID_UNIQUE")
+  LeagueNat   String?      @db.VarChar(512)
   Based       String?      @db.VarChar(512)
-  Division    String?      @db.VarChar(512)
   Club        String?      @db.VarChar(512)
   Name        String?      @db.VarChar(512)
   CA          Int?
