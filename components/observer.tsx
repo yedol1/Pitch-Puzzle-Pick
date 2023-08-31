@@ -1,4 +1,4 @@
-import { IProps } from '@/app/lib/type';
+import { IProps } from '@/app/type';
 import Image from 'next/image';
 import React, { useEffect, useRef } from 'react';
 

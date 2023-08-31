@@ -1,4 +1,4 @@
-import { FetchPlayersArgs, PlayerInfoType, HeaderType, OrderType } from '@/app/lib/type';
+import { FetchPlayersArgs, PlayerInfoType, HeaderType, OrderType } from '@/app/type';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { FilterableFieldsParmas, BelongFields } from '../constans';
 

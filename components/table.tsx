@@ -1,6 +1,6 @@
 import { notoSansKr, montserrat } from '@/app/lib/font';
 import TableRow from './tableRow';
-import { HeaderType, AlignBtnProps, PlayerInfoType } from '@/app/lib/type';
+import { HeaderType, AlignBtnProps, PlayerInfoType } from '@/app/type';
 import Observer from './observer';
 import { useDispatch, useSelector } from 'react-redux';
 import { setHeader, toggleOrder } from '@/app/lib/store/sort';

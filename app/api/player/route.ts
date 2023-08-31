@@ -73,16 +73,18 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
   }
 
   const users = await client.playerInfo.findMany({
-    take: 11,
-    ...(uid && { cursor: { UID: Number(uid) } }),
-    orderBy: {
-      [column]: order,
-    },
+    orderBy: [{ [column]: order }, { UID: 'asc' }],
     where: whereConditions,
     include: {
       status: true,
     },
+    take: 11,
+    skip: uid ? 1 : 0,
+    ...(uid !== '' && {
+      cursor: {
+        UID: Number(uid),
+      },
+    }),
   });
-
   return NextResponse.json(users);
 }

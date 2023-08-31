@@ -12,6 +12,7 @@ model PlayerInfo {
   LeagueNat   String?      @db.VarChar(512)
   Based       String?      @db.VarChar(512)
   Club        String?      @db.VarChar(512)
+  ClubID      Int?
   Name        String?      @db.VarChar(512)
   CA          Int?
   PA          Int?
@@ -84,4 +85,11 @@ model PlayerStatus {
   Fre        Int?
   Hea        Int?
   playerInfo PlayerInfo?
+}
+
+model ClubInfo {
+  ClubID Int     @id @unique(map: "ClubID_UNIQUE")
+  Club   String? @db.VarChar(512)
+
+  @@index([Club], map: "Club")
 }

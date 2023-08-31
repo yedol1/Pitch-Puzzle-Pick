@@ -54,6 +54,7 @@ export interface PlayerInfoType {
   LeagueNat?: string; // VARCHAR type
   Based?: string; // VARCHAR type
   Club?: string; // VARCHAR type
+  ClubID?: number;
   Name?: string; // VARCHAR type
   CA?: number;
   PA?: number;

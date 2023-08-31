@@ -5,6 +5,7 @@ import { ThemeProvider } from '@material-tailwind/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import SearchPage from '@/components/searchPage';
+import Banner from '@/components/banner';
 
 const queryClient = new QueryClient();
 const Home = () => {
@@ -12,6 +13,7 @@ const Home = () => {
     <Provider store={store}>
       <ThemeProvider>
         <QueryClientProvider client={queryClient}>
+          <Banner />
           <SearchPage />
           <ReactQueryDevtools />
         </QueryClientProvider>

@@ -4,6 +4,7 @@ CREATE TABLE `PlayerInfo` (
     `NatLeague` VARCHAR(512) NULL,
     `Based` VARCHAR(512) NULL,
     `Club` VARCHAR(512) NULL,
+    `ClubID` INTEGER NULL,
     `Name` VARCHAR(512) NULL,
     `CA` INTEGER NULL,
     `PA` INTEGER NULL,

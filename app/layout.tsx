@@ -13,7 +13,6 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
   <html lang='ko'>
     <body className={`${notoSansKr.className} relative flex min-h-screen flex-col items-center`}>
       <NavigationBar />
-      <Banner />
       {children}
     </body>
   </html>
