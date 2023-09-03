@@ -1,12 +1,34 @@
 'use client';
 
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import { poppins } from '@/app/lib/font';
+import path from 'path';
 
 const NavigationBar = () => {
   const pathname = usePathname();
+  const param = useParams();
+
+  let homeNavStyle = '';
+  let squadNavStyle = '';
+  let communityNavStyle = '';
+  switch (pathname) {
+    case '/':
+    case `/player/${param.UID}`:
+      homeNavStyle = 'border-b-2';
+      break;
+    case '/squad':
+    case `/squad/player/${param.UID}`:
+      squadNavStyle = 'border-b-2';
+      break;
+    case '/community':
+      communityNavStyle = 'border-b-2';
+      break;
+    default:
+      break;
+  }
+
   return (
     <nav
       className={`${poppins.className} fixed top-0 flex w-screen py-2 px-20 justify-center items-center bg-transparent text-white backdrop-blur-sm`}
@@ -20,13 +42,13 @@ const NavigationBar = () => {
 
         {/* 링크들 */}
         <div className='hidden customNav:flex flex-row h-86 gap-10 justify-center items-center'>
-          <Link href='/' className={`flex items-center h-86 ${pathname === '/' ? 'border-b-2' : ''}`}>
+          <Link href='/' className={`flex items-center h-86 ${homeNavStyle}`}>
             <p>Home</p>
           </Link>
-          <Link href='/squad' className={`flex items-center h-86 ${pathname === '/squad' ? 'border-b-2' : ''}`}>
+          <Link href='/squad' className={`flex items-center h-86 ${squadNavStyle}`}>
             <p>Team Squad</p>
           </Link>
-          <Link href='/community' className={`flex items-center h-86 ${pathname === '/community' ? 'border-b-2' : ''}`}>
+          <Link href='/community' className={`flex items-center h-86 ${communityNavStyle}`}>
             <p>Community</p>
           </Link>
         </div>

@@ -141,3 +141,23 @@ export const eplSort = (a: string | null, b: string | null) => {
 
   return a.localeCompare(b, 'ko-KR');
 };
+
+export const formatValue = (value: number): string => {
+  if (value >= 100000000) {
+    return `${(value / 100000000).toFixed(2)}억`;
+  } else if (value >= 10000) {
+    return `${Math.round(value / 10000)}만`;
+  } else {
+    return value.toString();
+  }
+};
+
+export const onErrorDefaultPlayerImg = (e: any) => {
+  e.target.src = '/default.svg';
+};
+export const onErrorDefaultFlag = (e: any) => {
+  e.target.src = '/defaultFlag.svg';
+};
+export const onErrorDefaultLogo = (e: any) => {
+  e.target.src = '/defaultLogo.png';
+};

@@ -1,7 +1,7 @@
 import './globals.css';
 import NavigationBar from '@/components/navBar';
-import Banner from '@/components/banner';
-import { notoSansKr } from './lib/font';
+import { notoSansKr } from '@/app/lib/font';
+import CustomProvider from '@/components/provider';
 
 export const metadata = {
   title: 'Pitch Puzzle Pick',
@@ -13,7 +13,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => (
   <html lang='ko'>
     <body className={`${notoSansKr.className} relative flex min-h-screen flex-col items-center`}>
       <NavigationBar />
-      {children}
+      <CustomProvider>{children}</CustomProvider>
     </body>
   </html>
 );

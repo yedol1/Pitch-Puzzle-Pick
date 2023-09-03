@@ -1,19 +1,12 @@
 'use client';
+import { formatValue, onErrorDefaultPlayerImg } from '@/app/lib/hook';
 import Image from 'next/image';
 import Link from 'next/link';
 import { use, useState } from 'react';
 
-const TableRow = ({ user, isDisabled = false }: any) => {
+const TableRow = ({ user, isDisabled = false }: { user: any; isDisabled: boolean }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
-  const formatValue = (value: number): string => {
-    if (value >= 100000000) {
-      return `${Math.round(value / 100000000)}억`;
-    } else if (value >= 10000) {
-      return `${Math.round(value / 10000)}만`;
-    } else {
-      return value.toString();
-    }
-  };
+
   return (
     <tr className='flex h-16 border-t border-solid border-gray-300 bg-white'>
       <td className='flex flex-row w-table py-0 pl-6 items-center space-x-1.5 pr-2 '>
@@ -75,13 +68,26 @@ const TableRow = ({ user, isDisabled = false }: any) => {
             className='cursor-pointer'
           />
         ) : (
-          <Image src='/default.svg' width={32} height={32} alt='유저의 가상 이미지' />
+          <Image
+            src='/[uid].svg'
+            width={32}
+            height={32}
+            alt='유저의 이미지'
+            onError={(e) => onErrorDefaultPlayerImg(e)}
+          />
         )}
         {user.UID !== 0 ? (
-          <Link href={`/player/${user.UID}`} className='hover:underline cursor-pointer'>
-            <p className='w-full truncate ml-2'>{user.Name}</p>
-            <p className='w-full truncate ml-2 text-[8px] mt-[4px] text-stone-300	'>{user.Position}</p>
-          </Link>
+          isDisabled === true ? (
+            <Link href={`/player/${user.UID}`} className='hover:underline cursor-pointer'>
+              <p className='w-full truncate ml-2'>{user.Name}</p>
+              <p className='w-full truncate ml-2 text-[8px] mt-[4px] text-stone-300'>{user.Position}</p>
+            </Link>
+          ) : (
+            <Link href={`/squad/player/${user.UID}`} className='hover:underline cursor-pointer'>
+              <p className='w-full truncate ml-2'>{user.Name}</p>
+              <p className='w-full truncate ml-2 text-[8px] mt-[4px] text-stone-300'>{user.Position}</p>
+            </Link>
+          )
         ) : (
           <p className='w-full truncate ml-2 hover:underline cursor-pointer'>선수정보가 없습니다.</p>
         )}

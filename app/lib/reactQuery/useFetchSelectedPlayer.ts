@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 const fetchSelectedPlayer = async (UID: number) => {
   const url = new URL(`/api/player/selected`, location.origin);
   if (UID > 0 && Number.isInteger(UID)) {
-    url.searchParams.append('playerUID', UID.toString());
+    url.searchParams.append('UID', UID.toString());
   }
   const response = await fetch(url.toString());
   if (!response.ok) {

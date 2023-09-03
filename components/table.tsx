@@ -1,3 +1,4 @@
+'use client';
 import { notoSansKr, montserrat } from '@/app/lib/font';
 import TableRow from './tableRow';
 import { HeaderType, AlignBtnProps, PlayerInfoType } from '@/app/type';
@@ -92,7 +93,7 @@ const Table = ({ isDisabled }: any) => {
               </button>
             </th>
             <th className='hidden tableAP:flex w-table py-0 pl-6 items-center space-x-1.5'>
-              <p className='text-sm font-normal font-medium leading-none tracking-tighter'>몸값</p>
+              <p className='text-sm font-normal font-medium leading-none tracking-tighter'>이적 금액</p>
               <button
                 className='flex flex-col justify-center items-start'
                 onClick={() => handleClick('AP' as HeaderType)}

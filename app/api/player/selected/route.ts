@@ -13,7 +13,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
   const url = new URL(req.url, baseUrl);
 
   const uid = url.searchParams.get('UID') || '';
-  const user = await client.playerInfo.findMany({
+  const user = await client.playerInfo.findUnique({
     where: {
       UID: Number(uid),
     },
