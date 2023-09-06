@@ -1,26 +1,13 @@
-'use client';
-import { IProps } from '@/app/type';
+// Observer.tsx
+import React, { useRef } from 'react';
+
 import { Spinner } from '@material-tailwind/react';
-import React, { useEffect, useRef } from 'react';
+import { IProps } from '@/app/type';
+import useHandleIntersection from '@/app/lib/useHandleIntersection';
 
 export default function Observer({ handleIntersection }: IProps) {
   const target = useRef(null);
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]: IntersectionObserverEntry[]) => {
-        if (entry.isIntersecting) {
-          handleIntersection();
-        }
-      },
-      { threshold: 1 },
-    );
-
-    if (target.current) {
-      observer.observe(target.current);
-    }
-
-    return () => observer.disconnect();
-  }, [handleIntersection]);
+  useHandleIntersection(handleIntersection, target);
 
   return (
     <div className='flex justify-center pt-5'>

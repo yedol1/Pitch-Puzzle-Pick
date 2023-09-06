@@ -4,7 +4,7 @@ import { useFetchSelectedPlayer } from '@/app/lib/reactQuery/useFetchSelectedPla
 import PlayerDetailInfo from './component/playerDetailInfo';
 import FieldPlayerMainStat from './component/fieldPlayerMainStat';
 import GkMainStat from './component/gkMainStat';
-import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from '@material-tailwind/react';
+import { Tabs, TabsHeader, TabsBody, Tab, TabPanel, Spinner } from '@material-tailwind/react';
 import FieldPlayerGraphStat from './component/fieldPlayerGraphStat';
 import GkMainGraphStat from './component/gkMainGraphStat';
 import FieldPlayerDetailStat from './component/fieldPlayerDetailStat';
@@ -19,7 +19,12 @@ const PlayerDetail = () => {
   const uid = Number(params.UID);
   const { data: playerData, isLoading, error: playerError } = useFetchSelectedPlayer(uid);
 
-  if (isLoading) return <div>loading...</div>;
+  if (isLoading)
+    return (
+      <div className='flex justify-center items-center h-screen'>
+        <Spinner color='blue' className='w-[50px] h-[50px]' />
+      </div>
+    );
 
   return (
     <section className='inline-flex justify-center items-start content-start gap-[87px] flex-wrap'>
