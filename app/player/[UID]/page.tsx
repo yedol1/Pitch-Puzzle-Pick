@@ -1,12 +1,78 @@
 'use client';
-import { useParams } from 'next/navigation';
-import { useFetchSelectedPlayer } from '../../lib/reactQuery/useFetchSelectedPlayer';
+import { useParams, useRouter } from 'next/navigation';
+import { useFetchSelectedPlayer } from '@/app/lib/reactQuery/useFetchSelectedPlayer';
+import PlayerDetailInfo from './component/playerDetailInfo';
+import FieldPlayerMainStat from './component/fieldPlayerMainStat';
+import GkMainStat from './component/gkMainStat';
+import { Tabs, TabsHeader, TabsBody, Tab, TabPanel } from '@material-tailwind/react';
+import FieldPlayerGraphStat from './component/fieldPlayerGraphStat';
+import GkMainGraphStat from './component/gkMainGraphStat';
+import FieldPlayerDetailStat from './component/fieldPlayerDetailStat';
+import GkDetailStat from './component/gkDetailStat';
+import Image from 'next/image';
 
+const data = ['DEFAULT', 'GRAPH'];
+type TabType = 'DEFAULT' | 'GRAPH';
 const PlayerDetail = () => {
-  // const {data: playerData, error: playerError} = useFetchSelectedPlayer()
   const params = useParams();
-  console.log(params);
-  return <div>hi</div>;
+  const router = useRouter();
+  const uid = Number(params.UID);
+  const { data: playerData, isLoading, error: playerError } = useFetchSelectedPlayer(uid);
+
+  if (isLoading) return <div>loading...</div>;
+
+  return (
+    <section className='inline-flex justify-center items-start content-start gap-[87px] flex-wrap'>
+      <h1 className='sr-only'>선수 디테일 페이지</h1>
+      <div className='w-[464px] flex flex-col'>
+        <div className='w-full flex flex-row items-start'>
+          <button onClick={() => router.back()}>
+            <Image src='/back.svg' width={138} height={50} alt='뒤로가기 버튼' />
+          </button>
+        </div>
+        <PlayerDetailInfo />
+        <div className='w-[464px] h-[2px] flex-shrink-0 bg-[#F75050] mt-[10px] mb-[30px]'></div>
+        {playerData.DetailedPos !== 'GK' ? (
+          <Tabs value='DEFAULT'>
+            <TabsHeader>
+              {data.map((value) => (
+                <Tab key={value} value={value}>
+                  {value}
+                </Tab>
+              ))}
+            </TabsHeader>
+            <TabsBody>
+              {data.map((value) => (
+                <TabPanel key={value} value={value}>
+                  {value === 'DEFAULT' ? <FieldPlayerMainStat /> : <FieldPlayerGraphStat />}
+                </TabPanel>
+              ))}
+            </TabsBody>
+          </Tabs>
+        ) : (
+          <Tabs value='DEFAULT'>
+            <TabsHeader>
+              {data.map((value) => (
+                <Tab key={value} value={value}>
+                  {value}
+                </Tab>
+              ))}
+            </TabsHeader>
+            <TabsBody>
+              {data.map((value) => (
+                <TabPanel key={value} value={value}>
+                  {value === 'DEFAULT' ? <GkMainStat /> : <GkMainGraphStat />}
+                </TabPanel>
+              ))}
+            </TabsBody>
+          </Tabs>
+        )}
+      </div>
+      <div className='flex p-[22px] py-[37px] items-start gap-[10px] rounded-[16.386px] bg-white shadow-custom'>
+        {playerData.DetailedPos !== 'GK' ? <FieldPlayerDetailStat /> : <GkDetailStat />}
+      </div>
+    </section>
+  );
 };
 
 export default PlayerDetail;

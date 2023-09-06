@@ -33,6 +33,9 @@ module.exports = withMT({
       },
       textColor: {
         'pri-color': '#5271ff',
+        soso: '#CCD0D6',
+        good: '#03C75A',
+        excellent: '#B81414',
       },
       letterSpacing: {
         tighter: '-0.09px',

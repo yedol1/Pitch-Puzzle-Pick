@@ -36,21 +36,23 @@ const NavigationBar = () => {
       <div className='flex flex-row w-full justify-between items-center '>
         {/* 로고 */}
         <div className='flex flex-row justify-center items-center'>
-          <Image src='/logo.svg' width={86} height={86} alt='로고 이미지' />
+          <Link href='/'>
+            <Image src='/logo.svg' width={86} height={86} alt='로고 이미지' />
+          </Link>
           <h1 className='sr-only'>Pitch Puzzle Pick</h1>
         </div>
 
         {/* 링크들 */}
         <div className='hidden customNav:flex flex-row h-86 gap-10 justify-center items-center'>
           <Link href='/' className={`flex items-center h-86 ${homeNavStyle}`}>
-            <p>Home</p>
+            <p>Search</p>
           </Link>
           <Link href='/squad' className={`flex items-center h-86 ${squadNavStyle}`}>
             <p>Team Squad</p>
           </Link>
-          <Link href='/community' className={`flex items-center h-86 ${communityNavStyle}`}>
+          {/* <Link href='/community' className={`flex items-center h-86 ${communityNavStyle}`}>
             <p>Community</p>
-          </Link>
+          </Link> */}
         </div>
 
         {/* 로그인 */}

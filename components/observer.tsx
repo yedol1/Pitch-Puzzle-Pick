@@ -1,6 +1,6 @@
 'use client';
 import { IProps } from '@/app/type';
-import Image from 'next/image';
+import { Spinner } from '@material-tailwind/react';
 import React, { useEffect, useRef } from 'react';
 
 export default function Observer({ handleIntersection }: IProps) {
@@ -24,7 +24,7 @@ export default function Observer({ handleIntersection }: IProps) {
 
   return (
     <div className='flex justify-center pt-5'>
-      <Image ref={target} src='/loading.gif' width={50} height={50} alt='로딩 이미지' />
+      <Spinner ref={target} color='blue' className='w-[30px] h-[30px]' />
     </div>
   );
 }
