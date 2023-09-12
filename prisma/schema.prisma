@@ -93,3 +93,33 @@ model ClubInfo {
 
   @@index([Club], map: "Club")
 }
+
+model Squad {
+  id                 Int            @id @default(autoincrement())
+  socialUserId       String         @map("social_user_id")
+  startingPlayerUids String         @db.VarChar(1024)
+  subPlayerUids      String         @db.VarChar(1024)
+  email              String
+  provider           SocialProvider
+  user               SocialUser     @relation(fields: [email, provider], references: [email, provider])
+
+  @@index([socialUserId], map: "Squad_social_user_id_fkey")
+  @@index([email, provider], map: "Squad_email_provider_fkey")
+}
+
+model SocialUser {
+  id       String         @id @default(cuid())
+  name     String?
+  email    String
+  image    String?
+  provider SocialProvider
+  squads   Squad[]
+
+  @@unique([email, provider])
+}
+
+enum SocialProvider {
+  GOOGLE
+  NAVER
+  FACEBOOK
+}

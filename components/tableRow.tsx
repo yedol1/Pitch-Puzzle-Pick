@@ -1,14 +1,34 @@
 'use client';
 import { formatValue, onErrorDefaultPlayerImg } from '@/app/lib/hook';
+import { addSubField } from '@/app/lib/store/selectedSquad';
+import { RootState } from '@/app/lib/store/store';
 import Image from 'next/image';
 import Link from 'next/link';
 import { use, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 const TableRow = ({ user, isDisabled = false }: { user: any; isDisabled: boolean }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const squad = useSelector((state: RootState) => state.squad);
+  const handleAddSquad = (uid: any) => {
+    const totalPlayers = squad.starting.length + squad.sub.length;
 
+    if (totalPlayers >= 23) {
+      alert('더 이상 선수를 추가할 수 없습니다.');
+      return;
+    }
+
+    dispatch(addSubField(uid));
+  };
+  const isUIDInSquad = (uid: any) => {
+    return squad.starting.includes(uid) || squad.sub.includes(uid);
+  };
+  const isInSquad = isUIDInSquad(user.UID);
   return (
-    <tr className='flex h-16 border-t border-solid border-gray-300 bg-white'>
+    <tr
+      className={`flex h-16 border-t border-solid border-gray-300 ${isInSquad ? 'bg-opacity-10 bg-black' : 'bg-white'}`}
+    >
       <td className='flex flex-row w-table py-0 pl-6 items-center space-x-1.5 pr-2 '>
         <div
           className={`w-9 h-9 flex-shrink-0 flex items-center text-center rounded-lg 
@@ -58,15 +78,10 @@ const TableRow = ({ user, isDisabled = false }: { user: any; isDisabled: boolean
         onMouseEnter={() => !isDisabled && setIsHovered(true)}
         onMouseLeave={() => !isDisabled && setIsHovered(false)}
       >
-        {isHovered ? (
-          <Image
-            src='/add.svg'
-            width={32}
-            height={32}
-            alt='스쿼드 추가 버튼 이미지'
-            onClick={() => console.log('if clicked, add squad')}
-            className='cursor-pointer'
-          />
+        {isHovered && !isUIDInSquad(user.UID) ? (
+          <button onClick={() => handleAddSquad(user.UID)}>
+            <Image src='/add.svg' width={32} height={32} alt='스쿼드 추가 버튼 이미지' className='cursor-pointer' />
+          </button>
         ) : (
           <Image
             src='/[uid].svg'

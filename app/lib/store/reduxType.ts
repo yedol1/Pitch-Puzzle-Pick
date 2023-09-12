@@ -1,8 +1,18 @@
 export type Action<Payload> = {
   type: string;
   payload: Payload;
+  startIndex?: number;
+  position?: string;
+  endIndex?: number;
+  sourceIndex?: number;
+  sourcePosition?: { position: string; player: Player | Player[] | null };
+  destPosition?: { position: string; player: Player | Player[] | null };
 };
-
+interface Player {
+  UID: string;
+  position: string;
+  // 필요한 경우 여기에 추가적인 필드들을 추가
+}
 export type Filters = {
   [key: string]: Filter;
 };

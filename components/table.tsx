@@ -8,6 +8,7 @@ import { setHeader, toggleOrder } from '@/app/lib/store/sort';
 import { useFetchPlayers } from '@/app/lib/reactQuery/useFetchPlayer';
 import { RootState } from '@/app/lib/store/reduxType';
 import { NullPlayerInfo } from '@/app/lib/constans';
+import SuccessAlertStyles from './successModal';
 
 const AlignBtn = ({ header, order, currentHeader }: AlignBtnProps) => {
   const isSelected = header === currentHeader;
@@ -38,7 +39,11 @@ const Table = ({ isDisabled }: any) => {
   const order = useSelector((state: RootState) => state.table.order);
   const filters = useSelector((state: RootState) => state.filters.filters);
   // 상태와 함께 데이터 가져오기
-  const { data, hasNextPage, fetchNextPage, isFetchingNextPage } = useFetchPlayers(selectedHeader, order, filters);
+  const { data, hasNextPage, fetchNextPage, isFetchingNextPage, isSuccess } = useFetchPlayers(
+    selectedHeader,
+    order,
+    filters,
+  );
 
   const handleClick = (headerValue: HeaderType) => {
     if (selectedHeader === headerValue) {
@@ -47,9 +52,8 @@ const Table = ({ isDisabled }: any) => {
       dispatch(setHeader(headerValue)); // Redux action 사용
     }
   };
-  console.log('다음페이지있음?', hasNextPage);
 
-  return (
+  return isSuccess ? (
     <>
       <table
         className={`${notoSansKr.className} flex w-fit-content flex-col items-center rounded-lg mt-8 shadow-custom rounded-bl-lg rounded-br-lg`}
@@ -116,9 +120,13 @@ const Table = ({ isDisabled }: any) => {
           )}
         </tbody>
       </table>
-      {hasNextPage && <Observer handleIntersection={() => fetchNextPage()} />}
+      {hasNextPage ? (
+        <Observer handleIntersection={() => fetchNextPage()} />
+      ) : (
+        <SuccessAlertStyles tit={'더이상의 선수가 없습니다.'} />
+      )}
     </>
-  );
+  ) : null;
 };
 
 export default Table;
