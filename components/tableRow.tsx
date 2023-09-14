@@ -12,17 +12,26 @@ const TableRow = ({ user, isDisabled = false }: { user: any; isDisabled: boolean
   const dispatch = useDispatch();
   const squad = useSelector((state: RootState) => state.squad);
   const handleAddSquad = (uid: any) => {
-    const totalPlayers = squad.starting.length + squad.sub.length;
+    const totalPlayers = squad.sub.length;
 
-    if (totalPlayers >= 23) {
-      alert('더 이상 선수를 추가할 수 없습니다.');
+    if (totalPlayers >= 14) {
+      alert('Sub 명단에 더 이상 선수를 추가할 수 없습니다.');
       return;
     }
 
     dispatch(addSubField(uid));
   };
+  type PlayerInfo = {
+    position: string;
+    player: number | null;
+  };
   const isUIDInSquad = (uid: any) => {
-    return squad.starting.includes(uid) || squad.sub.includes(uid);
+    const validStartingUIDs = squad.starting
+      .filter((playerInfo: PlayerInfo) => playerInfo.player !== null)
+      .map((playerInfo: PlayerInfo) => playerInfo.player);
+
+    const allUIDs = [...validStartingUIDs, ...squad.sub];
+    return allUIDs.includes(uid);
   };
   const isInSquad = isUIDInSquad(user.UID);
   return (

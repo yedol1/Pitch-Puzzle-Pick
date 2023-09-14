@@ -63,11 +63,6 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
   if (!user) {
     return NextResponse.json(null);
   }
-  const existingSquad = await prisma.squad.findFirst({
-    where: {
-      socialUserId: user.id,
-    },
-  });
 
-  return NextResponse.json(existingSquad);
+  return NextResponse.json(user.id);
 }

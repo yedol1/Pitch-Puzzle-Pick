@@ -1,15 +1,15 @@
 import { useMutation } from '@tanstack/react-query';
 import { NextResponse } from 'next/server';
 
-const createUser = async ({ session, provider }: { session: any; provider: string }) => {
-  const url = new URL('/api/user/create', location.origin);
+const updateSquad = async ({ userId, starting, sub }: { userId: string; starting: string; sub: string }) => {
+  const url = new URL('/api/user/squad/update', location.origin);
 
   const response = await fetch(url.toString(), {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ session, provider }),
+    body: JSON.stringify({ userId, starting, sub }),
   });
 
   if (!response.ok) {
@@ -25,6 +25,6 @@ const createUser = async ({ session, provider }: { session: any; provider: strin
   return data;
 };
 
-export function useCreateUser() {
-  return useMutation<any, Error, { session: any; provider: string }>(createUser);
+export function useUpdateSquad() {
+  return useMutation<any, Error, { userId: string; starting: string; sub: string }>(updateSquad);
 }

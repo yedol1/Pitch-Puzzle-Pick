@@ -10,6 +10,7 @@ export const REARRANGE_STARTING = 'squad/REARRANGE_STARTING';
 export const REARRANGE_SUB = 'squad/REARRANGE_SUB';
 export const SWAP_STARTING_POSITIONS = 'squad/SWAP_STARTING_POSITIONS';
 export const SWAP_SUB_TO_STARTING_POSITION = 'squad/SWAP_SUB_TO_STARTING_POSITION';
+export const RESET_SQUAD = 'squad/RESET_SQUAD';
 
 interface Player {
   UID: string;
@@ -27,6 +28,11 @@ export const addSubField = (field: number): Action<number> => ({
   payload: field,
 });
 
+export const resetSquad = (): Action<void> => ({
+  type: RESET_SQUAD,
+  payload: undefined,
+});
+
 export const removeSubField = (field: number): Action<number> => ({
   type: REMOVE_SUB_FIELD,
   payload: field,
@@ -37,9 +43,9 @@ export const removeStartingField = (field: number): Action<number> => ({
   payload: field,
 });
 
-export const setSquad = (squad: any): Action<any> => ({
+export const setSquad = (starting: string, sub: string): Action<any> => ({
   type: SET_SQUAD,
-  payload: squad,
+  payload: { starting, sub },
 });
 
 interface ActionWithPayload<T = void> {
@@ -127,6 +133,10 @@ const initialState: SquadState = {
       player: null,
     },
     {
+      position: 'CB',
+      player: null,
+    },
+    {
       position: 'RCB',
       player: null,
     },
@@ -147,6 +157,10 @@ const initialState: SquadState = {
       player: null,
     },
     {
+      position: 'CDM',
+      player: null,
+    },
+    {
       position: 'RDM',
       player: null,
     },
@@ -160,6 +174,10 @@ const initialState: SquadState = {
     },
     {
       position: 'LCM',
+      player: null,
+    },
+    {
+      position: 'CM',
       player: null,
     },
     {
@@ -180,6 +198,10 @@ const initialState: SquadState = {
       player: null,
     },
     {
+      position: 'AMC',
+      player: null,
+    },
+    {
       position: 'AMCR',
       player: null,
     },
@@ -191,8 +213,24 @@ const initialState: SquadState = {
   sub: [],
 };
 
+const parseStartingString = (str: string): Record<string, string> => {
+  return str.split(',').reduce((acc, pair) => {
+    const [position, UID] = pair.split(':');
+    acc[position] = UID;
+    return acc;
+  }, {} as Record<string, string>);
+};
+
+const parseSubString = (str: string): string[] => {
+  const result = str.split(',');
+  return result[0] === '' ? [] : result;
+};
+
 const squadReducer = (state = initialState, action: Action<any>): any => {
   switch (action.type) {
+    case RESET_SQUAD:
+      return initialState;
+
     case ADD_SUB_FIELD:
       return {
         ...state,
@@ -212,9 +250,28 @@ const squadReducer = (state = initialState, action: Action<any>): any => {
         ),
       };
     case SET_SQUAD:
+      const startingMap = parseStartingString(action.payload.starting);
+      const subList = parseSubString(action.payload.sub);
+
+      // Process starting
+      const processedStarting = state.starting.map((item) => {
+        const UID = startingMap[item.position];
+        if (UID) {
+          return {
+            position: item.position,
+            player: Number(UID),
+          };
+        }
+        return item;
+      });
+
+      // Process sub
+      const processedSub = subList.map((UID) => Number(UID));
+
       return {
         ...state,
-        ...action.payload,
+        starting: processedStarting,
+        sub: processedSub,
       };
     case MOVE_SUB_TO_STARTING:
       if (action.endIndex !== undefined && action.position) {
@@ -321,153 +378,3 @@ const squadReducer = (state = initialState, action: Action<any>): any => {
 };
 
 export default squadReducer;
-
-// import { Action } from './reduxType';
-
-// export const ADD_SUB_FIELD = 'squad/ADD_SUB_FIELD';
-// export const REMOVE_SUB_FIELD = 'squad/REMOVE_SUB_FIELD';
-// export const REMOVE_STARTING_FIELD = 'squad/REMOVE_STARTING_FIELD';
-// export const SET_SQUAD = 'squad/SET_SQUAD';
-// export const MOVE_SUB_TO_STARTING = 'squad/MOVE_SUB_TO_STARTING';
-// export const MOVE_STARTING_TO_SUB = 'squad/MOVE_STARTING_TO_SUB';
-// export const REARRANGE_STARTING = 'squad/REARRANGE_STARTING';
-// export const REARRANGE_SUB = 'squad/REARRANGE_SUB';
-
-// export const addSubField = (field: number): Action<number> => ({
-//   type: ADD_SUB_FIELD,
-//   payload: field,
-// });
-
-// export const removeSubField = (field: number): Action<number> => ({
-//   type: REMOVE_SUB_FIELD,
-//   payload: field,
-// });
-
-// export const removeStartingField = (field: number): Action<number> => ({
-//   type: REMOVE_STARTING_FIELD,
-//   payload: field,
-// });
-
-// export const setSquad = (squad: any): Action<any> => ({
-//   type: SET_SQUAD,
-//   payload: squad,
-// });
-
-// interface ActionWithPayload<T = void> {
-//   type: string;
-//   payload: T;
-//   endIndex?: number;
-// }
-
-// export const moveSubToStarting = (field: number, endIndex: number): ActionWithPayload<number> => ({
-//   type: MOVE_SUB_TO_STARTING,
-//   payload: field,
-//   endIndex,
-// });
-
-// export const moveStartingToSub = (field: number, endIndex: number): ActionWithPayload<number> => ({
-//   type: MOVE_STARTING_TO_SUB,
-//   payload: field,
-//   endIndex,
-// });
-
-// interface RearrangeAction {
-//   type: string;
-//   startIndex: number;
-//   endIndex: number;
-// }
-// export const rearrangeStarting = (startIndex: number, endIndex: number): Action<void> => ({
-//   type: REARRANGE_STARTING,
-//   startIndex,
-//   endIndex,
-//   payload: undefined,
-// });
-
-// export const rearrangeSub = (startIndex: number, endIndex: number): Action<void> => ({
-//   type: REARRANGE_SUB,
-//   startIndex,
-//   endIndex,
-//   payload: undefined,
-// });
-
-// const initialState: any = {
-//   starting: [],
-//   sub: [],
-// };
-
-// const squadReducer = (state = initialState, action: Action<any>): any => {
-//   switch (action.type) {
-//     case ADD_SUB_FIELD:
-//       return {
-//         ...state,
-//         sub: [...state.sub, action.payload],
-//       };
-//     case REMOVE_SUB_FIELD:
-//       return {
-//         ...state,
-//         sub: state.sub.filter((field: string) => field !== action.payload),
-//       };
-//     case REMOVE_STARTING_FIELD:
-//       return {
-//         ...state,
-//         starting: state.starting.filter((field: string) => field !== action.payload),
-//       };
-//     case SET_SQUAD:
-//       return {
-//         ...state,
-//         starting: action.payload.starting,
-//         sub: action.payload.sub,
-//       };
-//     case MOVE_SUB_TO_STARTING:
-//       if (action.endIndex !== undefined) {
-//         const newArr = Array.from(state.starting);
-//         newArr.splice(action.endIndex, 0, action.payload);
-//         return {
-//           ...state,
-//           starting: newArr,
-//           sub: state.sub.filter((field: string) => field !== action.payload),
-//         };
-//       }
-//       return state;
-
-//     case MOVE_STARTING_TO_SUB:
-//       if (action.endIndex !== undefined) {
-//         const newArr = Array.from(state.sub);
-//         newArr.splice(action.endIndex, 0, action.payload);
-//         return {
-//           ...state,
-//           starting: state.starting.filter((field: string) => field !== action.payload),
-//           sub: newArr,
-//         };
-//       }
-//       return state;
-
-//     case REARRANGE_STARTING:
-//       if (action.startIndex !== undefined && action.endIndex !== undefined) {
-//         const newArr = Array.from(state.starting);
-//         const [moved] = newArr.splice(action.startIndex, 1);
-//         newArr.splice(action.endIndex, 0, moved);
-//         return {
-//           ...state,
-//           starting: newArr,
-//         };
-//       }
-//       return state;
-//     case REARRANGE_SUB:
-//       if (action.startIndex !== undefined && action.endIndex !== undefined) {
-//         const newArr = Array.from(state.sub);
-//         const [moved] = newArr.splice(action.startIndex, 1);
-//         newArr.splice(action.endIndex, 0, moved);
-//         return {
-//           ...state,
-//           sub: newArr,
-//         };
-//       }
-//       return state;
-
-//     default:
-//       return state;
-//   }
-// };
-
-// export default squadReducer;

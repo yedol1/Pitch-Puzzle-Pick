@@ -12,9 +12,18 @@ const fetchSquadPlayers = async (UID: number) => {
 
   return response.json();
 };
+type PlayerInfo = {
+  position: string;
+  player: number | null;
+};
+export function useFetchSquadPlayers(squad: { starting: PlayerInfo[]; sub: number[] }) {
+  const validStartingUIDs = squad.starting
+    .filter((playerInfo) => playerInfo.player !== null)
+    .map((playerInfo) => playerInfo.player as number);
 
-export function useFetchSquadPlayers(squad: { starting: number[]; sub: number[] }) {
-  const playerQueries = [...squad.starting, ...squad.sub].map((UID) => {
+  const allUIDs = [...validStartingUIDs, ...squad.sub];
+
+  const playerQueries = allUIDs.map((UID) => {
     return {
       queryKey: ['selectedPlayer', UID],
       queryFn: () => fetchSquadPlayers(UID),

@@ -49,6 +49,7 @@
     "typescript": "5.0.4"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^4.34.1",
     "@types/ms": "^0.7.31",
     "@types/react-beautiful-dnd": "^13.1.4",
     "@types/styled-components": "^5.1.26",

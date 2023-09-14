@@ -21,6 +21,7 @@ const NavigationBar = () => {
   const pathname = usePathname();
   const param = useParams();
   const [showLoginModal, setShowLoginModal] = useState(false);
+  console.log(session);
 
   useEffect(() => {
     if (session && !userData && !isLoading && session?.provider) {
@@ -55,7 +56,7 @@ const NavigationBar = () => {
   return (
     <nav
       onClick={() => setShowLoginModal(false)}
-      className={`${poppins.className} fixed top-0 flex w-screen py-2 px-20 justify-center items-center bg-transparent text-white backdrop-blur-sm`}
+      className={`${poppins.className} fixed top-0 flex w-screen py-2 px-20 justify-center items-center bg-transparent text-white backdrop-blur-sm z-50`}
     >
       <div className='flex flex-row w-full justify-between items-center '>
         {/* 로고 */}

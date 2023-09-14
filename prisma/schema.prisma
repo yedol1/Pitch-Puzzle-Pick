@@ -95,16 +95,12 @@ model ClubInfo {
 }
 
 model Squad {
-  id                 Int            @id @default(autoincrement())
-  socialUserId       String         @map("social_user_id")
-  startingPlayerUids String         @db.VarChar(1024)
-  subPlayerUids      String         @db.VarChar(1024)
-  email              String
-  provider           SocialProvider
-  user               SocialUser     @relation(fields: [email, provider], references: [email, provider])
+  socialUserId       String     @id @map("social_user_id")
+  startingPlayerUids String     @db.VarChar(1024)
+  subPlayerUids      String     @db.VarChar(1024)
+  user               SocialUser @relation(fields: [socialUserId], references: [id])
 
   @@index([socialUserId], map: "Squad_social_user_id_fkey")
-  @@index([email, provider], map: "Squad_email_provider_fkey")
 }
 
 model SocialUser {
@@ -113,7 +109,7 @@ model SocialUser {
   email    String
   image    String?
   provider SocialProvider
-  squads   Squad[]
+  squads   Squad?
 
   @@unique([email, provider])
 }

@@ -28,7 +28,7 @@ const SuccessAlertStyles = ({ tit }: { tit: string }) => {
 
   if (!isVisible) return null;
   return (
-    <div className='fixed Wrapper1:w-[880px] Wrapper2:w-[710px] Wrapper3:w-[610px] w-[440px] bottom-[8px] left-[50%] transform -translate-x-[50%] flex items-center justify-center z-50'>
+    <div className='fixed Wrapper1:w-[880px] Wrapper2:w-[710px] Wrapper3:w-[610px] w-[440px] bottom-[8px] left-[50%] transform translate-x-[-50%] flex items-center justify-center z-50'>
       <Alert
         icon={<Icon />}
         className='rounded-none border-l-4 border-[#2ec946] bg-[#2ec946]/10 font-medium text-[#2ec946]'
