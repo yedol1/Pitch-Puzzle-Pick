@@ -204,7 +204,6 @@ export const formatValue = (value: number): string => {
  * @param e any
  */
 export const onErrorDefaultPlayerImg = (e: any) => {
-  console.log('에러 발생시 기본 이미지로 대체');
   if (!e.target.src.endsWith('/default.svg')) {
     // 무한 루프를 방지하기 위해 추가한 조건
     e.target.src = '/default.svg';

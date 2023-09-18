@@ -107,7 +107,7 @@ model SocialUser {
   id       String         @id @default(cuid())
   name     String?
   email    String
-  image    String?
+  image    String?        @db.VarChar(1024)
   provider SocialProvider
   squads   Squad?
 

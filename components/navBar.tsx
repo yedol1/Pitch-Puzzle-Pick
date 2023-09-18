@@ -20,7 +20,6 @@ const NavigationBar = () => {
   const pathname = usePathname();
   const param = useParams();
   const [showLoginModal, setShowLoginModal] = useState(false);
-  console.log(session);
 
   useEffect(() => {
     if (session && !userData && !isLoading && session?.provider) {

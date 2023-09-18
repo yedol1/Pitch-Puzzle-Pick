@@ -8,7 +8,6 @@ import { Checkbox } from '@material-tailwind/react';
 const OptionSelectPos = () => {
   const dispatch = useDispatch();
   const { filters: actualFilters } = useSelector((state: RootState) => state.filters);
-  console.log(actualFilters);
   const handlePosChange = (value: string) => {
     // Check if the current DetailedPos is an array
     if (Array.isArray(actualFilters['DetailedPos'])) {

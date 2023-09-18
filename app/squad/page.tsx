@@ -36,7 +36,6 @@ const Home = () => {
   const squadPlayersData = useFetchSquadPlayers(squad);
   const mutation = useUpdateSquad();
   const dispatch = useDispatch();
-  console.log(squad);
 
   useEffect(() => {
     if (squadData) {

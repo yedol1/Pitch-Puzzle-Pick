@@ -4,9 +4,7 @@ import { prisma } from '@/app/lib/prisma';
 const client = prisma;
 export async function POST(req: Request) {
   const data = await req.json();
-  console.log('Request Body:', data);
   const { userId, starting, sub } = data;
-  console.log(userId, starting, sub);
   try {
     const userSquad = await client.squad.updateMany({
       where: {

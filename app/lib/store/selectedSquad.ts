@@ -336,7 +336,6 @@ const squadReducer = (state = initialState, action: Action<any>): any => {
       return state;
     case SWAP_STARTING_POSITIONS:
       if (action.sourcePosition && action.destPosition) {
-        console.log(action.sourcePosition, action.destPosition);
         return {
           ...state,
           starting: state.starting.map((item) => {
