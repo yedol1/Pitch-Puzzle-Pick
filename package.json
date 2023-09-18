@@ -1,8 +1,8 @@
 {
-  "name": "postgres-prisma",
-  "repository": "https://github.com/vercel/examples.git",
+  "name": "pitchpuzzlepick",
+  "repository": "https://github.com/yedol1/Pitch-Puzzle-Pick/tree/main",
   "license": "MIT",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "dev": "prisma generate && next dev",
