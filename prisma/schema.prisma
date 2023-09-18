@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model PlayerInfo {
+  UID         Int          @id @unique(map: "UID_UNIQUE")
+  LeagueNat   String?      @db.VarChar(512)
+  Based       String?      @db.VarChar(512)
+  Club        String?      @db.VarChar(512)
+  ClubID      Int?
+  Name        String?      @db.VarChar(512)
+  CA          Int?
+  PA          Int?
+  Position    String?      @db.VarChar(512)
+  Age         Int?
+  Nat         String?      @db.VarChar(512)
+  DOB         String?      @db.VarChar(512)
+  Weight      String?      @db.VarChar(512)
+  Height      String?      @db.VarChar(512)
+  RightFoot   String?      @db.VarChar(512)
+  LeftFoot    String?      @db.VarChar(512)
+  AP          Int?
+  Salary      Int?
+  Personality String?      @db.VarChar(512)
+  ImpM        Int?
+  InjPr       Int?
+  Cons        Int?
+  Dirt        Int?
+  DetailedPos String?      @db.VarChar(512)
+  status      PlayerStatus @relation(fields: [UID], references: [UID], onDelete: NoAction, onUpdate: NoAction, map: "PlayerInfo_ibfk_1")
+}
+
+model PlayerStatus {
+  UID        Int         @id @unique(map: "UID_UNIQUE")
+  Wor        Int?
+  One        Int?
+  Tec        Int?
+  Fin        Int?
+  Kic        Int?
+  Thr        Int?
+  OtB        Int?
+  Aer        Int?
+  Bal        Int?
+  Ecc        Int?
+  Bra        Int?
+  TRO        Int?
+  Dri        Int?
+  Ldr        Int?
+  Str        Int?
+  Agi        Int?
+  Ref        Int?
+  Fir        Int?
+  Han        Int?
+  Pos        Int?
+  Com        Int?
+  Acc        Int?
+  Det        Int?
+  Vis        Int?
+  Ant        Int?
+  Mar        Int?
+  LTh        Int?
+  Agg        Int?
+  Jum        Int?
+  Pac        Int?
+  Lon        Int?
+  Sta        Int?
+  Cnt        Int?
+  Fla        Int?
+  Cmp        Int?
+  Cor        Int?
+  Cro        Int?
+  Nat        Int?
+  Tck        Int?
+  Tea        Int?
+  Dec        Int?
+  Pas        Int?
+  Pun        Int?
+  Cmd        Int?
+  Pen        Int?
+  Fre        Int?
+  Hea        Int?
+  playerInfo PlayerInfo?
+}
+
+model ClubInfo {
+  ClubID Int     @id @unique(map: "ClubID_UNIQUE")
+  Club   String? @db.VarChar(512)
+
+  @@index([Club], map: "Club")
+}
+
+model Squad {
+  socialUserId       String     @id @map("social_user_id")
+  startingPlayerUids String     @db.VarChar(1024)
+  subPlayerUids      String     @db.VarChar(1024)
+  user               SocialUser @relation(fields: [socialUserId], references: [id])
+
+  @@index([socialUserId], map: "Squad_social_user_id_fkey")
+}
+
+model SocialUser {
+  id       String         @id @default(cuid())
+  name     String?
+  email    String
+  image    String?
+  provider SocialProvider
+  squads   Squad?
+
+  @@unique([email, provider])
+}
+
+enum SocialProvider {
+  GOOGLE
+  NAVER
+  FACEBOOK
+}
