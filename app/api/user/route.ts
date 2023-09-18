@@ -24,7 +24,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
 
   const email = url.searchParams.get('email') || '';
   const provider = url.searchParams.get('provider') || '';
-  console.log(provider);
+
   if (!email) {
     // return res.status(400).json({ error: 'Email not provided' });
     return NextResponse.json(

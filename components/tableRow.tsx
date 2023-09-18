@@ -32,7 +32,6 @@ const TableRow = ({ user, isDisabled = false }: { user: any; isDisabled: boolean
       .map((playerInfo: PlayerInfo) => playerInfo.player);
 
     const allUIDs = [...validStartingUIDs, ...squad.sub];
-    console.log(allUIDs);
     return allUIDs.includes(uid);
   };
   const isInSquad = isUIDInSquad(user.UID);
