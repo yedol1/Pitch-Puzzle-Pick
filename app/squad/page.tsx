@@ -37,13 +37,14 @@ const Home = () => {
   const mutation = useUpdateSquad();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (squadData) {
-      dispatch(setSquad(squadData.startingPlayerUids, squadData.subPlayerUids));
-    }
-  }, [squadData]);
-  const [isDragging, setIsDragging] = useState(false);
-  const [currentDraggableId, setCurrentDraggableId] = useState(null);
+  // 첫페이지 로딩시, 로그인이 되어있으면, 유저의 스쿼드를 불러옴
+  // -> 분기처리가 어려움
+  // useEffect(() => {
+  //   if (squadData && session) {
+  //     dispatch(setSquad(squadData.startingPlayerUids, squadData.subPlayerUids));
+  //   }
+  // }, [session]);
+
   const onDragEnd = (result: any) => {
     if (!squad) return;
     const { source, destination, draggableId, reason } = result;
@@ -278,7 +279,7 @@ const Home = () => {
                                       return (
                                         <>
                                           <Link
-                                            href={`/squad/player/${String(UID)}`}
+                                            href={`/squad/player/${UID}`}
                                             className='flex flex-row items-center gap-[2px] flex-shrink-0'
                                           >
                                             <p className='w-[180px] flex text-black text-base font-semibold truncate hover:underline cursor-pointer'>
