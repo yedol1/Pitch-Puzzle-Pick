@@ -1,16 +1,14 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
+import { prisma } from '@/app/lib/prisma';
 
-const prisma = new PrismaClient();
-
+const client = prisma;
 export async function POST(req: Request) {
   const data = await req.json();
   console.log('Request Body:', data);
   const { userId, starting, sub } = data;
   console.log(userId, starting, sub);
   try {
-    const userSquad = await prisma.squad.updateMany({
+    const userSquad = await client.squad.updateMany({
       where: {
         socialUserId: userId,
       },
@@ -32,6 +30,6 @@ export async function POST(req: Request) {
       },
     );
   } finally {
-    await prisma.$disconnect();
+    await client.$disconnect();
   }
 }

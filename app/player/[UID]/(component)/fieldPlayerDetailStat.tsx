@@ -1,14 +1,11 @@
-import { useParams } from 'next/navigation';
-import { useFetchSelectedPlayer } from '@/app/lib/reactQuery/useFetchSelectedPlayer';
 import { Typography, Card } from '@material-tailwind/react';
 import { getColorClass } from '@/app/lib/hook';
 
-const FieldPlayerDetailStat = () => {
-  const params = useParams();
-  const uid = Number(params.UID);
-  const { data: playerData, isLoading, error: playerError } = useFetchSelectedPlayer(uid);
-
-  if (isLoading) return <div>loading...</div>;
+const FieldPlayerDetailStat = (props: { playerData: any }) => {
+  const { playerData } = props;
+  if (!playerData || !playerData.status) {
+    return null;
+  }
   const PHYSICAL_ROWS = [
     {
       name: '가속도',

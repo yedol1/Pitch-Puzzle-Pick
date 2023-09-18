@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // reactStrictMode: false,
+  // reactStrictMode: true,
   swcMinify: true,
   compiler: {
     styledComponents: true,
@@ -10,6 +10,7 @@ const nextConfig = {
   },
   images: {
     domains: ['pbs.twimg.com'],
+    domains: ['fm2023-player-images.s3.ap-northeast-2.amazonaws.com'],
   },
 };
 

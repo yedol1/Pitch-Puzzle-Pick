@@ -189,6 +189,7 @@ export const eplSort = (a: string | null, b: string | null) => {
  * @returns
  */
 export const formatValue = (value: number): string => {
+  if (!value) return '0';
   if (value >= 100000000) {
     return `${(value / 100000000).toFixed(2)}억`;
   } else if (value >= 10000) {
@@ -203,6 +204,11 @@ export const formatValue = (value: number): string => {
  * @param e any
  */
 export const onErrorDefaultPlayerImg = (e: any) => {
+  console.log('에러 발생시 기본 이미지로 대체');
+  if (!e.target.src.endsWith('/default.svg')) {
+    // 무한 루프를 방지하기 위해 추가한 조건
+    e.target.src = '/default.svg';
+  }
   e.target.src = '/default.svg';
 };
 
@@ -211,6 +217,10 @@ export const onErrorDefaultPlayerImg = (e: any) => {
  * @param e any
  */
 export const onErrorDefaultFlag = (e: any) => {
+  if (!e.target.src.endsWith('/defaultFlag.svg')) {
+    // 무한 루프를 방지하기 위해 추가한 조건
+    e.target.src = '/defaultFlag.svg';
+  }
   e.target.src = '/defaultFlag.svg';
 };
 /**
@@ -218,6 +228,10 @@ export const onErrorDefaultFlag = (e: any) => {
  * @param e any
  */
 export const onErrorDefaultLogo = (e: any) => {
+  if (!e.target.src.endsWith('/defaultLogo.png')) {
+    // 무한 루프를 방지하기 위해 추가한 조건
+    e.target.src = '/defaultLogo.png';
+  }
   e.target.src = '/defaultLogo.png';
 };
 

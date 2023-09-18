@@ -1,8 +1,7 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/app/lib/prisma';
 import { NextResponse } from 'next/server';
 
-const prisma = new PrismaClient();
+const client = prisma;
 enum SocialProvider {
   GOOGLE = 'GOOGLE',
   NAVER = 'NAVER',
@@ -11,7 +10,6 @@ enum SocialProvider {
 
 export async function POST(req: Request) {
   const data = await req.json();
-  console.log('Request Body:', data);
 
   if (!data.session || !data.session.user) {
     return NextResponse.json(
@@ -37,39 +35,34 @@ export async function POST(req: Request) {
       },
     );
   }
-  console.log(email, name, image, sessionProvider);
 
   try {
-    const existingUser = await prisma.socialUser.findFirst({
-      where: {
-        email: email,
-        provider: sessionProvider,
-      },
-    });
-
-    if (existingUser) {
-      return NextResponse.json(
-        {
-          message: 'User with this email already exists.',
+    const createdUser = await client.$transaction(async (client) => {
+      // 사용자 생성
+      const newUser = await client.socialUser.create({
+        data: {
+          email,
+          name,
+          image,
+          provider: sessionProvider.toUpperCase(),
         },
-        {
-          status: 409, // Conflict
-        },
-      );
-    }
+      });
 
-    await prisma.socialUser.create({
-      data: {
-        email,
-        name,
-        image,
-        provider: sessionProvider.toUpperCase(),
-      },
+      // 해당 사용자의 ID로 Squad 생성
+      await client.squad.create({
+        data: {
+          socialUserId: newUser.id,
+          startingPlayerUids: '',
+          subPlayerUids: '',
+        },
+      });
+
+      return newUser;
     });
 
     return NextResponse.json(
       {
-        message: 'User created successfully',
+        message: 'User and squad created successfully',
       },
       {
         status: 201,
@@ -85,6 +78,6 @@ export async function POST(req: Request) {
       },
     );
   } finally {
-    await prisma.$disconnect();
+    await client.$disconnect();
   }
 }

@@ -1,8 +1,10 @@
 import './globals.css';
 import NavigationBar from '@/components/navBar';
-import { notoSansKr } from '@/app/lib/font';
+import { notoSansKr, montserrat, poppins } from '@/app/lib/font';
 import CustomProvider from '@/components/provider';
 import AuthSession from '@/components/authSession';
+import { cls } from './lib/hook';
+import { Footer } from '@/components/footer';
 
 export const metadata = {
   title: 'Pitch Puzzle Pick',
@@ -12,11 +14,18 @@ export const metadata = {
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => (
   <html lang='ko'>
-    <body className={`${notoSansKr.className} relative flex min-h-screen flex-col items-center`}>
+    <body
+      className={`${cls(
+        notoSansKr.className,
+        montserrat.variable,
+        poppins.variable,
+      )} relative flex min-h-screen flex-col items-center`}
+    >
       <AuthSession>
         <CustomProvider>
           <NavigationBar />
           {children}
+          <Footer />
         </CustomProvider>
       </AuthSession>
     </body>

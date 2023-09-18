@@ -1,5 +1,4 @@
 'use client';
-import { notoSansKr, montserrat } from '@/app/lib/font';
 import TableRow from './tableRow';
 import { HeaderType, AlignBtnProps, PlayerInfoType } from '@/app/type';
 import Observer from './observer';
@@ -56,7 +55,7 @@ const Table = ({ isDisabled }: any) => {
   return isSuccess ? (
     <>
       <table
-        className={`${notoSansKr.className} flex w-fit-content flex-col items-center rounded-lg mt-8 shadow-custom rounded-bl-lg rounded-br-lg`}
+        className={`flex w-fit-content flex-col items-center rounded-lg mt-8 shadow-custom rounded-bl-lg rounded-br-lg`}
       >
         <thead className='text-sm text-white font-normal font-medium leading-none tracking-tighter'>
           <tr className='flex h-42 bg-pri-color rounded-tl-lg rounded-tr-lg '>
@@ -110,10 +109,12 @@ const Table = ({ isDisabled }: any) => {
             </th>
           </tr>
         </thead>
-        <tbody className={`${montserrat.className} text-sm font-normal font-medium leading-none tracking-tighter`}>
+        <tbody className={`font-montserrat text-sm font-normal font-medium leading-none tracking-tighter`}>
           {data?.pages[0].length ? (
             data.pages.map((pageData: any) =>
-              pageData.map((user: PlayerInfoType) => <TableRow user={user} key={user.UID} isDisabled={isDisabled} />),
+              pageData.map((user: PlayerInfoType) => (
+                <TableRow user={user} key={`table-${user.UID}`} isDisabled={isDisabled} />
+              )),
             )
           ) : (
             <TableRow user={NullPlayerInfo} key={NullPlayerInfo.UID} isDisabled={isDisabled} />

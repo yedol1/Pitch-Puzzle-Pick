@@ -1,9 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
-
-const prisma = new PrismaClient();
-
+import { prisma } from '@/app/lib/prisma';
+const client = prisma;
 enum SocialProvider {
   GOOGLE = 'GOOGLE',
   NAVER = 'NAVER',
@@ -54,7 +52,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
     );
   }
 
-  const user = await prisma.socialUser.findFirst({
+  const user = await client.socialUser.findFirst({
     where: {
       email: email,
       provider: provider as SocialProvider,

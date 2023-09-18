@@ -1,6 +1,4 @@
 import 'chart.js/auto'; // Chart.js 모든 것을 자동으로 등록
-import { useParams } from 'next/navigation';
-import { useFetchSelectedPlayer } from '@/app/lib/reactQuery/useFetchSelectedPlayer';
 import { Radar } from 'react-chartjs-2'; // Radar 컴포넌트를 import
 import {
   culGKSpdStat,
@@ -13,13 +11,11 @@ import {
   culGkSaveStat,
 } from '@/app/lib/hook';
 
-const GkMainGraphStat = () => {
-  const params = useParams();
-  const uid = Number(params.UID);
-  const { data: playerData, isLoading, error: playerError } = useFetchSelectedPlayer(uid);
-
-  if (isLoading) return <div>loading...</div>;
-
+const GkMainGraphStat = (props: { playerData: any }) => {
+  const { playerData } = props;
+  if (!playerData || !playerData.status) {
+    return null;
+  }
   const labels = ['SAVE', 'DEF CONTROL', 'AERIAL GRIP', 'DISTRIBUTION', 'SPEED', 'MENTAL', 'PHYSICAL', 'ECCENTRICITY'];
   const data = [
     culGkSaveStat(playerData.status),

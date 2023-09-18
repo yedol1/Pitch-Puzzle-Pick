@@ -1,23 +1,23 @@
 'use client';
 import { useParams, useRouter } from 'next/navigation';
 import { useFetchSelectedPlayer } from '@/app/lib/reactQuery/useFetchSelectedPlayer';
-import PlayerDetailInfo from './(component)/playerDetailInfo';
-import FieldPlayerMainStat from './(component)/fieldPlayerMainStat';
-import GkMainStat from './(component)/gkMainStat';
+import PlayerDetailInfo from '@/app/player/[UID]/(component)/playerDetailInfo';
+import FieldPlayerMainStat from '@/app/player/[UID]/(component)/fieldPlayerMainStat';
+import GkMainStat from '@/app/player/[UID]/(component)/gkMainStat';
 import { Tabs, TabsHeader, TabsBody, Tab, TabPanel, Spinner } from '@material-tailwind/react';
-import FieldPlayerGraphStat from './(component)/fieldPlayerGraphStat';
-import GkMainGraphStat from './(component)/gkMainGraphStat';
-import FieldPlayerDetailStat from './(component)/fieldPlayerDetailStat';
-import GkDetailStat from './(component)/gkDetailStat';
+import FieldPlayerGraphStat from '@/app/player/[UID]/(component)/fieldPlayerGraphStat';
+import GkMainGraphStat from '@/app/player/[UID]/(component)/gkMainGraphStat';
+import FieldPlayerDetailStat from '@/app/player/[UID]/(component)/fieldPlayerDetailStat';
+import GkDetailStat from '@/app/player/[UID]/(component)/gkDetailStat';
 import Image from 'next/image';
 
-const data = ['DEFAULT', 'GRAPH'];
-type TabType = 'DEFAULT' | 'GRAPH';
-const PlayerDetail = () => {
+const SquadPlayerDetail = () => {
   const params = useParams();
-  const router = useRouter();
   const uid = Number(params.UID);
+  const router = useRouter();
   const { data: playerData, isLoading, error: playerError } = useFetchSelectedPlayer(uid);
+
+  const data = ['DEFAULT', 'GRAPH'];
 
   if (isLoading)
     return (
@@ -94,4 +94,4 @@ const PlayerDetail = () => {
   );
 };
 
-export default PlayerDetail;
+export default SquadPlayerDetail;

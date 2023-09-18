@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
 import {
   eplSort,
@@ -11,8 +10,9 @@ import {
   seriaSort,
   spainSort,
 } from '@/app/lib/hook';
+import { prisma } from '@/app/lib/prisma';
 
-const client = new PrismaClient();
+const client = prisma;
 
 export async function GET(req: NextApiRequest, res: NextApiResponse) {
   if (!req.url) {

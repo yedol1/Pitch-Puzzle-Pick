@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
+import { prisma } from '@/app/lib/prisma';
 
-const prisma = new PrismaClient();
+const client = prisma;
 
 export async function GET(req: NextApiRequest, res: NextApiResponse) {
   if (!req.url) {
@@ -20,7 +20,7 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
   const url = new URL(req.url, baseUrl);
   const id = url.searchParams.get('id') || '';
 
-  const userSquad = await prisma.squad.findFirst({
+  const userSquad = await client.squad.findFirst({
     where: {
       socialUserId: id,
     },

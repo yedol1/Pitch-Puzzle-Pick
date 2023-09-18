@@ -5,7 +5,7 @@ const Banner = () => {
     <section className='inline-flex items-start gap-18 mt-34 text-white justify-center'>
       <Image src='/logo.svg' width={218} height={218} alt='로고 이미지' />
       <div className='hidden customNav:flex py-3 flex-col items-start gap-6.5'>
-        <h1 className='h-28.5 text-48 font-medium leading-125'>
+        <h1 className='font-montserrat h-28.5 text-48 font-medium leading-125'>
           Pitch Puzzle Pick
           <br />
           Who am I ?

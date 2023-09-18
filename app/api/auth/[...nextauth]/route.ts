@@ -3,9 +3,6 @@ import GoogleProvider from 'next-auth/providers/google';
 import NaverProvider from 'next-auth/providers/naver';
 import KakaoProvider from 'next-auth/providers/kakao';
 import FacebookProvider from 'next-auth/providers/facebook';
-import { JWT } from 'next-auth/jwt';
-import { Account, User } from 'next-auth';
-
 const handler = NextAuth({
   providers: [
     GoogleProvider({

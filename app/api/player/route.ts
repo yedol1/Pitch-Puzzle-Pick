@@ -1,9 +1,9 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { PrismaClient } from '@prisma/client';
 import { NextResponse } from 'next/server';
 import { InfoFields, StatusFields } from '../../lib/constans';
+import { prisma } from '@/app/lib/prisma';
 
-const client = new PrismaClient();
+const client = prisma;
 
 export async function GET(req: NextApiRequest, res: NextApiResponse) {
   if (!req.url) {
@@ -63,9 +63,12 @@ export async function GET(req: NextApiRequest, res: NextApiResponse) {
 
     DetailedPos.forEach((pos) => {
       filteredConditions.push({
-        DetailedPos: {
-          contains: pos,
-        },
+        OR: [
+          { DetailedPos: { startsWith: pos + ',' } }, // 포지션이 시작하는 경우
+          { DetailedPos: { endsWith: ',' + pos } }, // 포지션이 끝나는 경우
+          { DetailedPos: { contains: ',' + pos + ',' } }, // 포지션이 중간에 있는 경우
+          { DetailedPos: pos }, // 단일 포지션이 있는 경우
+        ],
       });
     });
 

@@ -1,14 +1,11 @@
-import { useParams } from 'next/navigation';
-import { useFetchSelectedPlayer } from '@/app/lib/reactQuery/useFetchSelectedPlayer';
-import { Tabs, TabsHeader, TabsBody, Tab, TabPanel, Typography, Card } from '@material-tailwind/react';
+import { Typography, Card } from '@material-tailwind/react';
 import { getColorClass } from '@/app/lib/hook';
 
-const GkDetailStat = () => {
-  const params = useParams();
-  const uid = Number(params.UID);
-  const { data: playerData, isLoading, error: playerError } = useFetchSelectedPlayer(uid);
-
-  if (isLoading) return <div>loading...</div>;
+const GkDetailStat = (props: { playerData: any }) => {
+  const { playerData } = props;
+  if (!playerData || !playerData.status) {
+    return null;
+  }
   const PHYSICAL_ROWS = [
     {
       name: '가속도',

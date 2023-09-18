@@ -1,16 +1,13 @@
 // import 부분
 import 'chart.js/auto';
-import { useParams } from 'next/navigation';
 import { culAtkStat, culDefStat, culMentalStat, culPhyStat, culSpdStat, culTechStat } from '@/app/lib/hook';
-import { useFetchSelectedPlayer } from '@/app/lib/reactQuery/useFetchSelectedPlayer';
 import { Radar } from 'react-chartjs-2';
 
-const FieldPlayerGraphStat = () => {
-  const params = useParams();
-  const uid = Number(params.UID);
-  const { data: playerData, isLoading, error: playerError } = useFetchSelectedPlayer(uid);
-
-  if (isLoading) return <div>loading...</div>;
+const FieldPlayerGraphStat = (props: { playerData: any }) => {
+  const { playerData } = props;
+  if (!playerData || !playerData.status) {
+    return null;
+  }
 
   const labels = ['ATTACK', 'DEFENCE', 'TECHNICAL', 'SPEED', 'PHYSICAL', 'MENTAL'];
   const data = [
@@ -50,14 +47,18 @@ const FieldPlayerGraphStat = () => {
           stepSize: 25,
           display: false,
         },
+        suggestedMin: 0, // 명시적으로 최소값 지정
+        suggestedMax: 100, // 명시적으로 최대값 지정
       },
     },
   };
 
   return (
-    <div className='flex h-[268px] justify-center'>
-      <Radar data={chartData} options={chartOptions} />
-    </div>
+    playerData && (
+      <div className='flex h-[268px] justify-center'>
+        <Radar data={chartData} options={chartOptions} />
+      </div>
+    )
   );
 };
 

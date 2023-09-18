@@ -6,6 +6,9 @@ interface PlayerDetailTooltipProps {
 }
 
 const PlayerDetailTooltip = ({ tit, sub }: PlayerDetailTooltipProps) => {
+  if (!tit || !sub) {
+    return null; // tit 혹은 sub 가 없으면 아무것도 렌더링하지 않음.
+  }
   return (
     <Tooltip
       placement='bottom'

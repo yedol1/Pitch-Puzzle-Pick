@@ -12,5 +12,5 @@ const fetchUserSquad = async (id: any) => {
 };
 
 export function useFetchUserSquad(id: any) {
-  return useQuery<any>(['user', id], () => fetchUserSquad(id));
+  return useQuery<any>(['savedSquad', id], () => fetchUserSquad(id));
 }

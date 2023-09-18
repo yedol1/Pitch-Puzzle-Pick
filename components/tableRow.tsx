@@ -4,9 +4,10 @@ import { addSubField } from '@/app/lib/store/selectedSquad';
 import { RootState } from '@/app/lib/store/store';
 import Image from 'next/image';
 import Link from 'next/link';
-import { use, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-
+import MyImage from './customImage';
+const playerURL = process.env.NEXT_PUBLIC_PLAYERS_URL;
 const TableRow = ({ user, isDisabled = false }: { user: any; isDisabled: boolean }) => {
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const dispatch = useDispatch();
@@ -31,12 +32,15 @@ const TableRow = ({ user, isDisabled = false }: { user: any; isDisabled: boolean
       .map((playerInfo: PlayerInfo) => playerInfo.player);
 
     const allUIDs = [...validStartingUIDs, ...squad.sub];
+    console.log(allUIDs);
     return allUIDs.includes(uid);
   };
   const isInSquad = isUIDInSquad(user.UID);
   return (
     <tr
-      className={`flex h-16 border-t border-solid border-gray-300 ${isInSquad ? 'bg-opacity-10 bg-black' : 'bg-white'}`}
+      className={`flex h-16 border-t border-solid border-gray-300 ${
+        !isDisabled && isInSquad ? 'bg-opacity-10 bg-black' : 'bg-white'
+      }`}
     >
       <td className='flex flex-row w-table py-0 pl-6 items-center space-x-1.5 pr-2 '>
         <div
@@ -92,22 +96,23 @@ const TableRow = ({ user, isDisabled = false }: { user: any; isDisabled: boolean
             <Image src='/add.svg' width={32} height={32} alt='스쿼드 추가 버튼 이미지' className='cursor-pointer' />
           </button>
         ) : (
-          <Image
-            src='/[uid].svg'
+          <MyImage
+            src={`${playerURL}/${user.UID}.png`}
             width={32}
             height={32}
             alt='유저의 이미지'
-            onError={(e) => onErrorDefaultPlayerImg(e)}
+            fallbackSrc='/default.svg'
+            onError={(e: any) => onErrorDefaultPlayerImg(e)}
           />
         )}
         {user.UID !== 0 ? (
           isDisabled === true ? (
-            <Link href={`/player/${user.UID}`} className='hover:underline cursor-pointer'>
+            <Link href={`/player/${String(user.UID)}`} className='hover:underline cursor-pointer'>
               <p className='w-full truncate ml-2'>{user.Name}</p>
               <p className='w-full truncate ml-2 text-[8px] mt-[4px] text-stone-300'>{user.Position}</p>
             </Link>
           ) : (
-            <Link href={`/squad/player/${user.UID}`} className='hover:underline cursor-pointer'>
+            <Link href={`/squad/player/${String(user.UID)}`} className='hover:underline cursor-pointer'>
               <p className='w-full truncate ml-2'>{user.Name}</p>
               <p className='w-full truncate ml-2 text-[8px] mt-[4px] text-stone-300'>{user.Position}</p>
             </Link>

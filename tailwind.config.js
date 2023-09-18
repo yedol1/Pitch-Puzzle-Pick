@@ -50,6 +50,10 @@ module.exports = withMT({
       },
       screens: {
         customNav: '740px',
+        DragWrapper1: { min: '1006px' },
+        DragWrapper2: { min: '912px', max: '1005px' },
+        DragWrapper3: { min: '740px', max: '911px' },
+        DragWrapper4: { min: '640px', max: '739px' },
         Wrapper1: { min: '912px' },
         Wrapper2: { min: '740px', max: '911px' },
         Wrapper3: { min: '640px', max: '739px' },
@@ -85,7 +89,8 @@ module.exports = withMT({
         14: '14px',
       },
       fontFamily: {
-        roboto: ['var(--font-roboto)'],
+        montserrat: ['var(--montserrat)'],
+        poppins: ['var(--poppins)'],
       },
     },
   },

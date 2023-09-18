@@ -3,7 +3,6 @@ import { signOut, useSession } from 'next-auth/react';
 import { useParams, usePathname } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { poppins } from '@/app/lib/font';
 import LoginModal from './loginModal';
 import { useEffect, useState } from 'react';
 import { useFetchUser } from '@/app/lib/reactQuery/useFetchUser';
@@ -56,7 +55,7 @@ const NavigationBar = () => {
   return (
     <nav
       onClick={() => setShowLoginModal(false)}
-      className={`${poppins.className} fixed top-0 flex w-screen py-2 px-20 justify-center items-center bg-transparent text-white backdrop-blur-sm z-50`}
+      className={`font-poppins fixed top-0 flex w-screen py-2 px-20 justify-center items-center bg-transparent text-white backdrop-blur-sm z-50`}
     >
       <div className='flex flex-row w-full justify-between items-center '>
         {/* 로고 */}

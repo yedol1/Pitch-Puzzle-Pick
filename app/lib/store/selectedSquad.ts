@@ -239,15 +239,13 @@ const squadReducer = (state = initialState, action: Action<any>): any => {
     case REMOVE_SUB_FIELD:
       return {
         ...state,
-        sub: state.sub.filter((player) => player.UID !== action.payload),
+        sub: state.sub.filter((player) => player !== action.payload),
       };
 
     case REMOVE_STARTING_FIELD:
       return {
         ...state,
-        starting: state.starting.map((item) =>
-          item.position === action.payload.position ? { ...item, player: null } : item,
-        ),
+        starting: state.starting.map((item) => (item.position === action.payload ? { ...item, player: null } : item)),
       };
     case SET_SQUAD:
       const startingMap = parseStartingString(action.payload.starting);
